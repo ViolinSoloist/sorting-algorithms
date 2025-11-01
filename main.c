@@ -193,7 +193,9 @@ int medianadeTres(int lim){ //para o qsort
     }
 }
 
-Info quick_sort(int* v, int inf, int sup){  //mandar inf=0 quando chamar a funcao
+Info quick_sort2(int* v, int inf, int sup){  //quick sort dps da primeira chamada
+    
+
     int aux;
 
     int indiceMediana = medianaDeTres(sup);
@@ -216,13 +218,56 @@ Info quick_sort(int* v, int inf, int sup){  //mandar inf=0 quando chamar a funca
         }
     }while(i<j);
     if(j>inf){
-        quick_sort(v, inf, j);
+        quick_sort2(v, inf, j);
     }
     if(i<sup){
-        quick_sort(v, i, sup);
+        quick_sort2(v, i, sup);
     }
 
 }
+
+Info quick_sort(int* v, int inf, int sup){  //mandar inf=0 quando chamar a funcao
+    ui comparisons = 0;
+    ui swaps = 0;
+    clock_t inicio = clock(); //inicio da marcação de tempo
+
+    int aux;
+
+    int indiceMediana = medianaDeTres(sup);
+    int pivo = v[indiceMediana];
+
+    int i = inf;
+    int j = sup;
+    do{
+        while(v[i] < pivo){
+            comparisons++;
+            i++;
+        }
+        while(v[j] > pivo){
+            comparisons++;
+            j--;
+        }
+
+        if(i <=j){
+            swap(v, i, j);
+            swaps++;
+            i++;
+            j++;
+        }
+    }while(i<j);
+    if(j>inf){
+        quick_sort2(v, inf, j);
+    }
+    if(i<sup){
+        quick_sort2(v, i, sup);
+    }
+
+    clock_t fim = clock(); // fim da marcação de tempo
+    double tempo_gasto = (double)(fim - inicio) / CLOCKS_PER_SEC;
+    Info qsort = {v, comparisons, swaps, tempo_gasto};
+    return qsort;
+}
+
 
 int main()
 {   
@@ -237,7 +282,7 @@ int main()
 
     // print_vetor(bbs.sorted_array, n);
     printf("\nPara n = %d\nComparacoes: %u, swaps: %u, tempo decorrido: %.3lf %s.\n", n, bbs.comparisons, bbs.swaps, (bbs.execution_time < 0.1 ? bbs.execution_time * 1000 : bbs.execution_time), (bbs.execution_time < 0.1 ? "ms" : "s"));
-
+    
     //a gente cria um vetor pra cada método de sort? Ou atualiza o mesmo vetor???
     free(vetor);
     return 0;
