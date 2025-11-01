@@ -24,7 +24,7 @@
  *  3. aleatórios
  * 
  *  Tem duas opções para isso (pode ter outras opções, mas por enquanto só pensei nessas duas
- * que parecem ser as melhores, se você tiver outra idea melhor pd falar tmb) 8==========D
+ * que parecem ser as melhores, se você tiver outra idea melhor pd falar tmb) 
  *  @details a gente cria uma função que cria um vetor de tamanho N com alocação dinâmica (retorna ponteiro de ponteiro)
  * e da free conforme a gente for usando e deixando de usar, e usa stdlib pra ir preenchendo os vetores com números aleatórios
  * (não importa quando for ordenado ou inverso porque a gente faz um for loop incrementando ou decrementando, não faz diferença)
@@ -59,7 +59,7 @@
  * @attention tem que ter a mesma quantidade de free()'s que tem essa função chamada na main
  * @details como devemos testar cada método de ordenação com diferentes quantidades de vetores com diferentes tamanhos e modos,
  * é inteligente fazer uma função que trate a geração desses vetores
- * recebe o tamanho do vetor @param n e o @param modo de geração (aleatorio, ordenado e inversamente ordenado)
+ * recebe o tamanho do vetor @param n numero de elementos @param modo 1-aleatorio, 2-ordenado e 3-inversamente ordenado
  * @return ponteiro pra array de inteiros alocados dinamicamente.
  */
 int* make_vector(int n, int modo) // 1 -> aleatorio, 2 -> ordenado 3 -> inverso
@@ -70,9 +70,6 @@ int* make_vector(int n, int modo) // 1 -> aleatorio, 2 -> ordenado 3 -> inverso
         switch (modo)
 //  acho que a gente não precisa fazer uma função pros vetores
 //  a gente pdoe criar eles com malloc, no caso os 4 vetores de 100 1000 e tal e resetar o valor deles pra cada sort
-//  
-// :(( VOU ESCREVER TUDO EM BRAINFUCK MESMO FODASE >...++-->;>><<..<++-->>>.__ (HLO WORLD BLYAT)
-
 // sim sim, a função seria só pra deixar mais claro, mas seria só pra gerar esses 4 vetores, em vez de deixar na main
         {
             case 1: //aleatorio
@@ -106,7 +103,7 @@ int* make_vector(int n, int modo) // 1 -> aleatorio, 2 -> ordenado 3 -> inverso
     return v;
 }
 
-/**
+/**  
  * @brief função que realiza swap entre dois registros de um vetor
  * recebe o vetor, e as posições em index (0-indexado) que serão trocadas de lugar
  * @
@@ -181,9 +178,55 @@ Info bubble_sort(int* v, int n)
     return bbs_info;
 }
 
+int medianadeTres(int lim){ //para o qsort
+    int n1 = rand() % lim;
+    int n2 = rand() % lim;
+    int n3 = rand() % lim;
+    if((n1 <= n2 && n2 <= n3) || (n3 <= n2 && n2 <= n1)){
+        return n2;
+    }
+    else if((n2 <= n1 && n1 <= n3) || (n3 <= n1 && n1 <= n2)){
+        return n1;
+    }
+    else{
+        return n3;
+    }
+}
+
+Info quick_sort(int* v, int inf, int sup){  //mandar inf=0 quando chamar a funcao
+    int aux;
+
+    int indiceMediana = medianaDeTres(sup);
+    int pivo = v[indiceMediana];
+
+    int i = inf;
+    int j = sup;
+    do{
+        while(v[i] < pivo){
+            i++;
+        }
+        while(v[j] > pivo){
+            j--;
+        }
+
+        if(i <=j){
+            swap(v, i, j);
+            i++;
+            j++;
+        }
+    }while(i<j);
+    if(j>inf){
+        quick_sort(v, inf, j);
+    }
+    if(i<sup){
+        quick_sort(v, i, sup);
+    }
+
+}
 
 int main()
 {   
+    srand(time(NULL)); // iniciando o gerador de números aleatórios
     // NOTAS PARA DANILO: TÁ FUNCINOANDO AGORA! TESTE COM DIFERENTES TAMANHOS DE N,
     int n = 10000;
     int* vetor = make_vector(n, 1); //TESTE TAMBÉM COM DIFERENTES TIPOS DE DE MODOS (1, 2 OU 3) (ALEATORIO, ORDENADO, INVERSAMENTE ORDENADO)
@@ -193,8 +236,9 @@ int main()
     Info bbs = bubble_sort(vetor, n);
 
     // print_vetor(bbs.sorted_array, n);
-    printf("Comparacoes: %u, swaps: %u, tempo decorrido: %.3lf %s.\n", bbs.comparisons, bbs.swaps, (bbs.execution_time < 0.1 ? bbs.execution_time * 1000 : bbs.execution_time), (bbs.execution_time < 0.1 ? "ms" : "s"));
+    printf("\nPara n = %d\nComparacoes: %u, swaps: %u, tempo decorrido: %.3lf %s.\n", n, bbs.comparisons, bbs.swaps, (bbs.execution_time < 0.1 ? bbs.execution_time * 1000 : bbs.execution_time), (bbs.execution_time < 0.1 ? "ms" : "s"));
 
+    //a gente cria um vetor pra cada método de sort? Ou atualiza o mesmo vetor???
     free(vetor);
     return 0;
 }
