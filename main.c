@@ -1,8 +1,8 @@
 //importando bibliotecas
-#include <stdio.h>              
-#include <stdbool.h>            
-#include <stdlib.h>             
-#include <time.h>     
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <time.h>
 
 #define MIN_RAND 1
 #define MAX_RAND 100000
@@ -14,7 +14,7 @@
  * número de comparações
  * número de movimentações de registro
  * tempo de execução (usar biblioteca <time.h>)
-*/ 
+*/
 
 /**
  *  @attention a gente também vai precisar considerar vetores de tamanho 100, 1000, 10000 e 100000 elementos
@@ -22,13 +22,13 @@
  *  1. ordenados
  *  2. Inversos
  *  3. aleatórios
- * 
+ *
  *  Tem duas opções para isso (pode ter outras opções, mas por enquanto só pensei nessas duas
- * que parecem ser as melhores, se você tiver outra idea melhor pd falar tmb) 
+ * que parecem ser as melhores, se você tiver outra idea melhor pd falar tmb)
  *  @details a gente cria uma função que cria um vetor de tamanho N com alocação dinâmica (retorna ponteiro de ponteiro)
  * e da free conforme a gente for usando e deixando de usar, e usa stdlib pra ir preenchendo os vetores com números aleatórios
  * (não importa quando for ordenado ou inverso porque a gente faz um for loop incrementando ou decrementando, não faz diferença)
- * 
+ *
  *  @details criamos novos arquivos de entrada (ex: 1.in, 2.in) que são literalmente uma linha com a quantidade de números
  * e na hora de executar o código a gente passa o arquivo como entrada, em vez de fornecer a entrada do teclado
  *  (Ex: ./a.out < 1.in) no linux
@@ -39,7 +39,7 @@
 
 // vou deixar anotado todos os sorts, a gente vai marcando no final de cada linha os completos
 /**
- * Bubble Sort
+ * Bubble Sort (feito)
  * Selection Sort
  * Insertion Sort
  * Shell Sort
@@ -66,7 +66,7 @@ int* make_vector(int n, int modo) // 1 -> aleatorio, 2 -> ordenado 3 -> inverso
 {
     int* v = (int*)calloc(n, sizeof(int)); // v inicia com 0 em todos index, eu acho
     if (v != NULL)
-    {    
+    {
         switch (modo)
 //  acho que a gente não precisa fazer uma função pros vetores
 //  a gente pdoe criar eles com malloc, no caso os 4 vetores de 100 1000 e tal e resetar o valor deles pra cada sort
@@ -74,7 +74,7 @@ int* make_vector(int n, int modo) // 1 -> aleatorio, 2 -> ordenado 3 -> inverso
         {
             case 1: //aleatorio
                 // TODO <stdlib.h> rand() preencher com números aleatórios
-                srand(time(NULL)); //seed 
+                srand(time(NULL)); //seed
                 for(int i=0; i<n; i++) {
                     int rand_num = (rand() % MAX_RAND) + MIN_RAND;
                     v[i] = rand_num;
@@ -103,7 +103,7 @@ int* make_vector(int n, int modo) // 1 -> aleatorio, 2 -> ordenado 3 -> inverso
     return v;
 }
 
-/**  
+/**
  * @brief função que realiza swap entre dois registros de um vetor
  * recebe o vetor, e as posições em index (0-indexado) que serão trocadas de lugar
  * @
@@ -122,21 +122,38 @@ void print_vetor(int* v, int n) {
     printf("\n");
 }
 
+int medianadeTres(int lim) // quick sort
+{
+    int n1 = rand() % lim;
+    int n2 = rand() % lim;
+    int n3 = rand() % lim;
+
+    if((n1 <= n2 && n2 <= n3) || (n3 <= n2 && n2 <= n1)){
+        return n2;
+    }
+    else if((n2 <= n1 && n1 <= n3) || (n3 <= n1 && n1 <= n2)){
+        return n1;
+    }
+    else{
+        return n3;
+    }
+}
+
 
 /**
  * $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
- *                 FUNÇÕES DE ORDENAÇÃO 
+ *                 FUNÇÕES DE ORDENAÇÃO
  * $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
- * 
+ *
  * @details cada função de ordenação @returns uma struct, contendo:
  * - ponteiro para vetor pós-ordenação (alocado dinamicamente)
  * - inteiro que representa o número de comparações realizadas
  * - inteiro representando número de movimentações de registros (provavelmente swaps?)
  * - float representando tempo de execução até terminar a ordenação
- * 
+ *
  * @attention uso de struct não é necessário, mas ajuda a modularizar o código
  * @deprecated por enquanto, é só isso, mas é importante lembrar que a gente vai ter que
- * guardar todas essas informações para todos os tamanhos de vetores e para cada tamanho, 
+ * guardar todas essas informações para todos os tamanhos de vetores e para cada tamanho,
  * todas as formas de registros originais (ordenado, aleatório, inversamente ordenado)
 */
 
@@ -144,7 +161,7 @@ typedef struct info_ {
     int* sorted_array;
     ui comparisons;
     ui swaps;
-    float execution_time;
+    double execution_time;
 }Info;
 
 
@@ -160,7 +177,7 @@ Info bubble_sort(int* v, int n)
         bool teve_swap = false;
 
         for(int j=0; j<n-1-i; j++)
-        {          
+        {
             comparisons++; // if que verifica se o registro atual é maior que o próximo registro
             if(v[j] > v[j+1]) {
                 swaps++; // sempre que tem swap incrimenta
@@ -178,27 +195,16 @@ Info bubble_sort(int* v, int n)
     return bbs_info;
 }
 
-int medianadeTres(int lim){ //para o qsort
-    int n1 = rand() % lim;
-    int n2 = rand() % lim;
-    int n3 = rand() % lim;
-    if((n1 <= n2 && n2 <= n3) || (n3 <= n2 && n2 <= n1)){
-        return n2;
-    }
-    else if((n2 <= n1 && n1 <= n3) || (n3 <= n1 && n1 <= n2)){
-        return n1;
-    }
-    else{
-        return n3;
-    }
-}
 
+/**
+* @deprecated
+*/
 Info quick_sort2(int* v, int inf, int sup){  //quick sort dps da primeira chamada
-    
 
-    int aux;
 
-    int indiceMediana = medianaDeTres(sup);
+    // int aux;
+
+    int indiceMediana = medianadeTres(sup);
     int pivo = v[indiceMediana];
 
     int i = inf;
@@ -223,17 +229,24 @@ Info quick_sort2(int* v, int inf, int sup){  //quick sort dps da primeira chamad
     if(i<sup){
         quick_sort2(v, i, sup);
     }
-
+    // retornar struct Info ou definir a função para retornar void ou outra coisa
 }
 
+/**
+* @deprecated
+* arrumar função de index para pivo (retornar a posição cujo valor seja a mediana, não a mediana do index)
+* revisar variaveis não usadas no código
+* função quick_sort 2 define retorno da struct Info mas não retorna
+* testar código para ver se está certo e testar para diferentes tamanhos de n e modos (aleatorio, ordenado, inversamente ordenado)
+*/
 Info quick_sort(int* v, int inf, int sup){  //mandar inf=0 quando chamar a funcao
     ui comparisons = 0;
     ui swaps = 0;
     clock_t inicio = clock(); //inicio da marcação de tempo
 
-    int aux;
+    //int aux; que variavel é essa? pra que serve? tá acusando como "unused variable"
 
-    int indiceMediana = medianaDeTres(sup);
+    int indiceMediana = medianadeTres(sup);
     int pivo = v[indiceMediana];
 
     int i = inf;
@@ -269,21 +282,66 @@ Info quick_sort(int* v, int inf, int sup){  //mandar inf=0 quando chamar a funca
 }
 
 
+
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+// PROCEDIMENTO (FUNÇÃO QUE NÃO RETORNA NADA) QUE VAI FAZER UM MINI "RELATORIO"
+// SORTAR PARA DIFERENTES N E MODOS
+
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+void relatorio(int id_sort) /** @param recebe id de qual sort vai ser analisado*/
+{
+    const int tamanhos_de_teste[4] = {100, 1000, 10000, 100000};
+
+    printf("\033[2J\033[H"); // limpa a tela
+
+    switch (id_sort)
+    {
+    case 1:
+        printf("BUBBLE SORT\n\n");
+        break;
+
+    default:
+            fprintf(stderr, "ID de sort inválido.\n");
+            return;
+    }
+
+    printf("====================\n");
+    printf("ELEMENTOS ORDENADOS:\n");
+    printf("====================\n\n");
+
+    for (int i=0; i<4; i++) // ITERA POR TODOS OS TAMANHOS DE VETOR QUE PRECISAMOS TESTAR
+    {
+        printf("Tamanho do vetor: %d\n", tamanhos_de_teste[i]);
+
+        int* v = make_vector(tamanhos_de_teste[i], 2);
+
+        switch (id_sort)
+        {
+            case 1: {//bubble sort
+                Info bbs = bubble_sort(v, tamanhos_de_teste[i]);
+                printf("Comparacoes: %u\nSwaps: %u\nTempo decorrido: %.3lf %s.\n", bbs.comparisons, bbs.swaps, (bbs.execution_time < 0.1 ? bbs.execution_time * 1000 : bbs.execution_time), (bbs.execution_time < 0.1 ? "ms" : "s"));
+                printf("\n");
+                break;
+            }
+            default:
+                // já tem verificação acima.
+        }
+
+        free(v);
+    }
+
+    return;
+}
+
+
 int main()
-{   
+{
     srand(time(NULL)); // iniciando o gerador de números aleatórios
-    // NOTAS PARA DANILO: TÁ FUNCINOANDO AGORA! TESTE COM DIFERENTES TAMANHOS DE N,
-    int n = 10000;
-    int* vetor = make_vector(n, 1); //TESTE TAMBÉM COM DIFERENTES TIPOS DE DE MODOS (1, 2 OU 3) (ALEATORIO, ORDENADO, INVERSAMENTE ORDENADO)
-    
-    // print_vetor(vetor, n);
 
-    Info bbs = bubble_sort(vetor, n);
+    // 1 = bubble sort
+    relatorio(1);
 
-    // print_vetor(bbs.sorted_array, n);
-    printf("\nPara n = %d\nComparacoes: %u, swaps: %u, tempo decorrido: %.3lf %s.\n", n, bbs.comparisons, bbs.swaps, (bbs.execution_time < 0.1 ? bbs.execution_time * 1000 : bbs.execution_time), (bbs.execution_time < 0.1 ? "ms" : "s"));
-    
-    //a gente cria um vetor pra cada método de sort? Ou atualiza o mesmo vetor???
-    free(vetor);
     return 0;
 }
