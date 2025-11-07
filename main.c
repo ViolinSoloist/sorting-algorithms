@@ -5,7 +5,8 @@
 #include <time.h>
 
 #define MIN_RAND 1
-#define MAX_RAND 100000
+
+#define QNTD_TESTES 3
 
 #define ui unsigned int
 
@@ -55,50 +56,45 @@
 //            FUNÇÕES AUXILIARES
 // ------------------------------------------
 /**
- * @note testado, mas ainda assim é melhor testar com mais exemplos
  * @attention tem que ter a mesma quantidade de free()'s que tem essa função chamada na main
- * @details como devemos testar cada método de ordenação com diferentes quantidades de vetores com diferentes tamanhos e modos,
+ * @details como devemos testar cada método de ordenação com diferentes quantidades de vetores com diferentes tamanhos,
  * é inteligente fazer uma função que trate a geração desses vetores
- * recebe o tamanho do vetor @param n numero de elementos @param modo 1-aleatorio, 2-ordenado e 3-inversamente ordenado
+ * recebe o tamanho do vetor @param n numero de elementos
  * @return ponteiro pra array de inteiros alocados dinamicamente.
  */
-int* make_vector(int n, int modo) // 1 -> aleatorio, 2 -> ordenado 3 -> inverso
+int* make_rand_vector(int n)
 {
     int* v = (int*)calloc(n, sizeof(int)); // v inicia com 0 em todos index, eu acho
+    //  acho que a gente não precisa fazer uma função pros vetores
+    //  a gente pdoe criar eles com malloc, no caso os 4 vetores de 100 1000 e tal e resetar o valor deles pra cada sort
+    // sim sim, a função seria só pra deixar mais claro, mas seria só pra gerar esses 4 vetores, em vez de deixar na main
+
+    if (v != NULL) {
+        // TODO <stdlib.h> rand() preencher com números aleatórios
+        srand(time(NULL)); //seed
+
+        int maximo = n;
+
+        for(int i=0; i<n; i++) {
+            int rand_num = (rand() % maximo) + MIN_RAND;
+            v[i] = rand_num;
+        }
+    }
+    return v;
+}
+
+/**
+* @attention se chamar, lembrar de dar free no vetor
+*/
+int* make_ordered_vector(int n)
+{
+    int* v = (int*)calloc(n, sizeof(int));
+
     if (v != NULL)
     {
-        switch (modo)
-//  acho que a gente não precisa fazer uma função pros vetores
-//  a gente pdoe criar eles com malloc, no caso os 4 vetores de 100 1000 e tal e resetar o valor deles pra cada sort
-// sim sim, a função seria só pra deixar mais claro, mas seria só pra gerar esses 4 vetores, em vez de deixar na main
-        {
-            case 1: //aleatorio
-                // TODO <stdlib.h> rand() preencher com números aleatórios
-                srand(time(NULL)); //seed
-                for(int i=0; i<n; i++) {
-                    int rand_num = (rand() % MAX_RAND) + MIN_RAND;
-                    v[i] = rand_num;
-                }
-
-            break;
-
-            case 2: //ordenado {1, 2, 3, 4, 5, ... , 98, 99}
-                for (int i=0; i<n; i++) {
-                    v[i] = i+1;
-                }
-            break;
-
-            case 3: // inversamento ordenado {99, 98, 97, ... , 3, 2, 1}
-                for (int i=n-1; i>=0; i--) {
-                    v[i] = n-i;
-                }
-            break;
-
-            default:
-                fprintf(stderr, "Modo inválido.\n");
-            break;
+        for(int i=0; i<n; i++) {
+            v[i] = i+1;
         }
-
     }
     return v;
 }
@@ -290,46 +286,118 @@ Info quick_sort(int* v, int inf, int sup){  //mandar inf=0 quando chamar a funca
 
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
-void relatorio(int id_sort) /** @param recebe id de qual sort vai ser analisado*/
+void print_nome_do_sort(int id_sort)
 {
-    const int tamanhos_de_teste[4] = {100, 1000, 10000, 100000};
-
-    printf("\033[2J\033[H"); // limpa a tela
-
     switch (id_sort)
     {
     case 1:
         printf("BUBBLE SORT\n\n");
-        break;
+        return;
 
     default:
-            fprintf(stderr, "ID de sort inválido.\n");
-            return;
+        fprintf(stderr, "ID de sort inválido.\n");
+        return;
+    }
+}
+
+void mostrar_info_bubblesort(int* v, int n)
+{
+    Info bbs = bubble_sort(v, n);
+    printf("Comparacoes: %u\nSwaps: %u\nTempo decorrido: %.3lf %s.\n",
+        bbs.comparisons, bbs.swaps, (bbs.execution_time < 0.1 ?
+        bbs.execution_time * ( (double)1000.0) :
+        bbs.execution_time), (bbs.execution_time < 0.1 ? "milisegundos" : "segundos"));
+    printf("\n");
+
+    return;
+}
+
+void randomize_vector(int* v, int n)
+{
+    int maximo = n;
+
+    for(int i=0; i<n; i++)
+    {
+        int rand_num = (rand() % maximo) + MIN_RAND;
+        v[i] = rand_num;
     }
 
-    printf("====================\n");
-    printf("ELEMENTOS ORDENADOS:\n");
-    printf("====================\n\n");
+    return;
+}
 
-    for (int i=0; i<4; i++) // ITERA POR TODOS OS TAMANHOS DE VETOR QUE PRECISAMOS TESTAR
+void do_5_calls_v_rand(int n, int id_sort)
+{
+    int* v = make_rand_vector(n);
+    if (v == NULL) fprintf(stderr, "Falha na alocação de memória para vetor de tamanho %d.\n", n);
+    printf("Testes para tamanho n = %d.\n\n", n);
+
+    for (int j=0; j<5; j++)
     {
-        printf("Tamanho do vetor: %d\n", tamanhos_de_teste[i]);
+        // a primeira vez já tá aleatório, mas nas outras vezes precisa aleatorizar de novo
+        // (poderia fazer free e malloc todas as vezes, mas melhor não)
+        if (j!=0)
+            randomize_vector(v, n);
 
-        int* v = make_vector(tamanhos_de_teste[i], 2);
+
+
+        printf("Teste %d:\n", j+1);
 
         switch (id_sort)
         {
             case 1: {//bubble sort
-                Info bbs = bubble_sort(v, tamanhos_de_teste[i]);
-                printf("Comparacoes: %u\nSwaps: %u\nTempo decorrido: %.3lf %s.\n", bbs.comparisons, bbs.swaps, (bbs.execution_time < 0.1 ? bbs.execution_time * 1000 : bbs.execution_time), (bbs.execution_time < 0.1 ? "ms" : "s"));
-                printf("\n");
+                mostrar_info_bubblesort(v, n);
                 break;
+
             }
             default:
                 // já tem verificação acima.
         }
+        printf("\n");
+    }
+    printf("\n");
 
-        free(v);
+    free(v);
+    return;
+}
+
+void relatorio(int id_sort) /** @param recebe id de qual sort vai ser analisado*/
+{
+    const int tamanhos_de_teste[QNTD_TESTES] = {100, 1000, 10000};
+
+    printf("\033[2J\033[H"); // limpa a tela
+
+    print_nome_do_sort(id_sort);
+
+    printf("====================\n");
+    printf("ELEMENTOS ALEATORIOS:\n");
+    printf("====================\n\n");
+
+    for (int i=0; i<QNTD_TESTES; i++) // ITERA POR TODOS OS TAMANHOS DE VETOR QUE PRECISAMOS TESTAR
+    {
+        int tam_v_atual = tamanhos_de_teste[i];
+        // cinco chamadas por tamanho de vetor aleatorio
+
+        if (tam_v_atual == 100000) {
+            printf("ATENCAO: para cada sort aleatorio desse tamanho, demora um pouco mais de 30 seg.\n");
+            printf("Vai demorar um pouco menos de 3 min para mostrar todos os 5 vetores ordenados.\n");
+        }
+
+        do_5_calls_v_rand(tam_v_atual, id_sort);
+
+    }
+
+    printf("===================\n");
+    printf("ELEMENTOS ORDENADOS:\n");
+    printf("===================\n\n");
+
+    for(int i=0; i<QNTD_TESTES; i++)
+    {
+        int tam_v_atual = tamanhos_de_teste[i];
+        int* v_sorted = make_ordered_vector(tam_v_atual);
+        printf("Tamanho: %d\n", tam_v_atual);
+        mostrar_info_bubblesort(v_sorted, tam_v_atual);
+
+        free(v_sorted);
     }
 
     return;
@@ -342,6 +410,5 @@ int main()
 
     // 1 = bubble sort
     relatorio(1);
-
     return 0;
 }
