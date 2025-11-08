@@ -6,7 +6,7 @@
 
 #define MIN_RAND 1
 
-#define QNTD_TESTES 3
+#define QNTD_TESTES 4
 
 #define ui unsigned int
 
@@ -45,7 +45,7 @@
  * Insertion Sort
  * Shell Sort
  * Quick Sort
- * Heap Sort
+ * Heap Sort (feito)
  * Merge Sort
  * Contagem dos Menores
  * Radix Sort
@@ -73,7 +73,7 @@ int* make_rand_vector(int n)
         // TODO <stdlib.h> rand() preencher com números aleatórios
         srand(time(NULL)); //seed
 
-        int maximo = n;
+        int maximo = (int)(n * 1.2);
 
         for(int i=0; i<n; i++) {
             int rand_num = (rand() % maximo) + MIN_RAND;
@@ -98,6 +98,26 @@ int* make_ordered_vector(int n)
     }
     return v;
 }
+
+/**
+* @attention mesma coisa, dar free() se chamar
+*/
+int* make_reversed_sorted_vector(int n)
+{
+    int* v = (int*)calloc(n, sizeof(int));
+
+    if (v != NULL)
+    {
+        int j=1;
+        for(int i=n-1; i>=0; i--) {
+            v[i] = j;
+            j++;
+        }
+    }
+
+    return v;
+}
+
 
 /**
  * @brief função que realiza swap entre dois registros de um vetor
@@ -170,18 +190,15 @@ Info bubble_sort(int* v, int n)
 
     for(int i=0; i<n-1; i++)
     {
-        bool teve_swap = false;
-
         for(int j=0; j<n-1-i; j++)
         {
             comparisons++; // if que verifica se o registro atual é maior que o próximo registro
             if(v[j] > v[j+1]) {
                 swaps++; // sempre que tem swap incrimenta
                 swap(v, j, j+1);
-                teve_swap = true;
             }
         }
-        if (!teve_swap) break; //se nenhum movimento é feito quer dizer que já está ordenado
+        if (!swaps) break; //se nenhum movimento é feito quer dizer que já está ordenado
     }
 
     clock_t fim = clock(); // fim da marcação de tempo
@@ -277,6 +294,69 @@ Info quick_sort(int* v, int inf, int sup){  //mandar inf=0 quando chamar a funca
     return qsort;
 }
 
+// HEAP SORT
+
+
+/**
+* @brief reorganiza a heap a partir de um nó "i" e propaga até a raíz, no máximo
+*/
+Info balance_heap(int* v, int n, int i, Info info)
+{
+    Info hp_info = info;
+
+    int left = 2*i + 1;
+    int right = 2*i + 2;
+
+    int maior = i;
+
+    hp_info.comparisons++;
+    if (left < n && v[left] > v[i]) maior = left;
+    hp_info.comparisons++;
+    if (right < n && v[right] > v[maior]) maior = right;
+
+    if (maior != i) {
+        hp_info.swaps++;
+        swap(v, i, maior);
+        hp_info = balance_heap(v, n, maior, hp_info);
+    }
+    return hp_info;
+}
+
+/**
+* @brief transforma o vetor em uma heap
+*/
+Info make_heap(int *v, int n, Info hp_sort)
+{
+    Info info = hp_sort;
+    int middle = n/2-1;
+    for(int i=middle; i>=0; i--)
+        info = balance_heap(v,n,i,info);
+
+    return info;
+}
+
+Info heap_sort(int* v, int n)
+{
+    Info hp_sort = {v, 0, 0, 0.0};
+    clock_t inicio = clock(); //inicio da marcação de tempo
+
+    hp_sort = make_heap(v, n, hp_sort);
+    while (--n)
+    {
+        hp_sort.swaps++;
+        swap(v, 0, n);
+
+        hp_sort = balance_heap(v, n, 0, hp_sort);
+    }
+
+    clock_t fim = clock(); // fim da marcação de tempo
+    double tempo_gasto = (double)(fim - inicio) / CLOCKS_PER_SEC;
+
+    hp_sort.execution_time = tempo_gasto;
+
+    return hp_sort;
+}
+
 
 
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -294,19 +374,36 @@ void print_nome_do_sort(int id_sort)
         printf("BUBBLE SORT\n\n");
         return;
 
+    case 2:
+        printf("HEAP SORT\n\n");
+        return;
+
     default:
         fprintf(stderr, "ID de sort inválido.\n");
         return;
     }
 }
 
-void mostrar_info_bubblesort(int* v, int n)
+void mostrar_info(int* v, int n, int id_sort)
 {
-    Info bbs = bubble_sort(v, n);
+    Info sort_info;
+    switch (id_sort)
+    {
+        case 1:
+            sort_info = bubble_sort(v, n);
+            break;
+
+        case 2:
+            sort_info = heap_sort(v, n);
+            break;
+
+        default:
+    }
+
     printf("Comparacoes: %u\nSwaps: %u\nTempo decorrido: %.3lf %s.\n",
-        bbs.comparisons, bbs.swaps, (bbs.execution_time < 0.1 ?
-        bbs.execution_time * ( (double)1000.0) :
-        bbs.execution_time), (bbs.execution_time < 0.1 ? "milisegundos" : "segundos"));
+        sort_info.comparisons, sort_info.swaps, (sort_info.execution_time < 0.1 ?
+        sort_info.execution_time * 1000 :
+        sort_info.execution_time), (sort_info.execution_time < 0.1 ? "milisegundos" : "segundos"));
     printf("\n");
 
     return;
@@ -328,7 +425,11 @@ void randomize_vector(int* v, int n)
 void do_5_calls_v_rand(int n, int id_sort)
 {
     int* v = make_rand_vector(n);
-    if (v == NULL) fprintf(stderr, "Falha na alocação de memória para vetor de tamanho %d.\n", n);
+    if (v == NULL) {
+        fprintf(stderr, "Falha na alocação de memória para vetor de tamanho %d.\n", n);
+        return;
+    }
+
     printf("Testes para tamanho n = %d.\n\n", n);
 
     for (int j=0; j<5; j++)
@@ -338,20 +439,9 @@ void do_5_calls_v_rand(int n, int id_sort)
         if (j!=0)
             randomize_vector(v, n);
 
-
-
         printf("Teste %d:\n", j+1);
 
-        switch (id_sort)
-        {
-            case 1: {//bubble sort
-                mostrar_info_bubblesort(v, n);
-                break;
-
-            }
-            default:
-                // já tem verificação acima.
-        }
+        mostrar_info(v, n, id_sort);
         printf("\n");
     }
     printf("\n");
@@ -362,7 +452,7 @@ void do_5_calls_v_rand(int n, int id_sort)
 
 void relatorio(int id_sort) /** @param recebe id de qual sort vai ser analisado*/
 {
-    const int tamanhos_de_teste[QNTD_TESTES] = {100, 1000, 10000};
+    const int tamanhos_de_teste[QNTD_TESTES] = {100, 1000, 10000, 100000};
 
     printf("\033[2J\033[H"); // limpa a tela
 
@@ -378,11 +468,13 @@ void relatorio(int id_sort) /** @param recebe id de qual sort vai ser analisado*
         // cinco chamadas por tamanho de vetor aleatorio
 
         if (tam_v_atual == 100000) {
-            printf("ATENCAO: para cada sort aleatorio desse tamanho, demora um pouco mais de 30 seg.\n");
-            printf("Vai demorar um pouco menos de 3 min para mostrar todos os 5 vetores ordenados.\n");
+            printf("ATENCAO: para cada sort aleatorio desse tamanho, demora um pouco mais de 20 seg.\n");
+            printf("Vai demorar um pouco menos de 2 min para mostrar todos os 5 vetores ordenados.\n\n");
         }
 
-        do_5_calls_v_rand(tam_v_atual, id_sort);
+        // condição temporária (pra poder testar n = 100000 com outros modos, mas não com esse se não vai demorar muito)
+        // if (tam_v_atual != 100000)
+            do_5_calls_v_rand(tam_v_atual, id_sort);
 
     }
 
@@ -393,22 +485,85 @@ void relatorio(int id_sort) /** @param recebe id de qual sort vai ser analisado*
     for(int i=0; i<QNTD_TESTES; i++)
     {
         int tam_v_atual = tamanhos_de_teste[i];
+
+        // alocação dinamica para criar vetor em cada loop
+        // (não faço um único porque pra cada loop, o tamanho muda)
+        // e usar realloc é paia dms
         int* v_sorted = make_ordered_vector(tam_v_atual);
+        if (v_sorted == NULL) {
+            fprintf(stderr, "Falha na alocação de memória para vetor de tamanho %d.\n", tam_v_atual);
+            return;
+        }
         printf("Tamanho: %d\n", tam_v_atual);
-        mostrar_info_bubblesort(v_sorted, tam_v_atual);
+        mostrar_info(v_sorted, tam_v_atual, id_sort);
 
         free(v_sorted);
     }
 
+    printf("=================================\n");
+    printf("ELEMENTOS INVERSAMENTE ORDENADOS:\n");
+    printf("=================================\n\n");
+
+    for (int i=0; i<QNTD_TESTES; i++)
+    {
+        int tam_v_atual = tamanhos_de_teste[i];
+
+        int* vetor = make_reversed_sorted_vector(tam_v_atual);
+        if (vetor == NULL) {
+            fprintf(stderr, "Falha na alocação de memória para vetor de tamanho %d.\n", tam_v_atual);
+            return;
+        }
+        printf("Tamanho: %d\n", tam_v_atual);
+        mostrar_info(vetor, tam_v_atual, id_sort);
+
+
+        free(vetor);
+    }
+    printf("\n\n");
+
     return;
 }
 
+void testar_sort(int id_sort)
+{
+    const int n = 30;
+    int* v = make_rand_vector(n);
+
+    for (int i=0; i<5; i++)
+    {
+        if (i!=0) randomize_vector(v, n);
+        print_vetor(v, n);
+
+        switch (id_sort)
+        {
+        case 1:
+            bubble_sort(v, n);
+            break;
+
+        case 2:
+            heap_sort(v, n);
+            break;
+
+        default:
+        }
+
+        print_vetor(v, n);
+
+        printf("\n");
+    }
+    if (v!=NULL) free(v);
+}
 
 int main()
 {
     srand(time(NULL)); // iniciando o gerador de números aleatórios
 
-    // 1 = bubble sort
+    /**
+    * 1 = bubble sort
+    * 2 = heap sort
+    */
     relatorio(1);
+    relatorio(2);
+
     return 0;
 }
