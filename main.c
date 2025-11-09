@@ -359,7 +359,32 @@ Info heap_sort(int* v, int n)
     return hp_sort;
 }
 
+Info insertion_sort(int *v, int n){
+    ui comparisons = 0;
+    ui swaps = 0;
+    clock_t inicio = clock(); //inicio da marcação de tempo
 
+    int i, j, elem;
+
+    for(i=1; i<n; i++){
+        elem = v[i];
+        for(j=i-1; j>=0 && elem<v[j]; j--){
+            comparisons++;
+            v[j+1] = v[j];
+            swaps++;
+        }
+        if(j >=0){
+            comparisons++;
+        }
+
+        v[j+1] = elem;
+    }
+
+    clock_t fim = clock(); // fim da marcação de tempo
+    double tempo_gasto = (double)(fim - inicio) / CLOCKS_PER_SEC;
+    Info insort = {v, comparisons, swaps, tempo_gasto};
+    return insort;
+}
 
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
@@ -383,6 +408,9 @@ void print_nome_do_sort(int id_sort)
     case 3:
         printf("QUICK SORT\n\n");
         return;
+    case 4:
+        printf("INSERTION SORT\n\n");
+        return;
     default:
         fprintf(stderr, "ID de sort inválido.\n");
         return;
@@ -403,6 +431,10 @@ void mostrar_info(int* v, int n, int id_sort)
             break;
         case 3:
             sort_info = quick_sort(v, n);
+            break;
+        case 4:
+            sort_info = insertion_sort(v, n);
+            break;
     }
 
     printf("Comparacoes: %u\nSwaps: %u\nTempo decorrido: %.3lf %s.\n",
@@ -537,6 +569,7 @@ void testar_sort(int id_sort)
     for (int i=0; i<5; i++)
     {
         if (i!=0) randomize_vector(v, n);
+        printf("\nVetor desordenado:\n");
         print_vetor(v, n);
 
         switch (id_sort)
@@ -552,8 +585,11 @@ void testar_sort(int id_sort)
             case 3:
                 quick_sort(v, n);
                 break;
+            case 4:
+                insertion_sort(v, n);
+                break;
         }
-
+        printf("Vetor ordenado:\n");
         print_vetor(v, n);
 
         printf("\n");
@@ -571,7 +607,8 @@ int main()
     */
     //relatorio(1);
     //relatorio(2);
-    relatorio(3);
+    //testar_sort(4);
+    relatorio(4);
 
     return 0;
 }
