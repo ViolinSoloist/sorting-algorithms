@@ -138,16 +138,16 @@ void print_vetor(int* v, int n) {
     printf("\n");
 }
 
-int medianadeTres(int lim) // quick sort
+int medianadeTres(int* v, int min, int lim) // quick sort
 {
-    int n1 = rand() % lim;
-    int n2 = rand() % lim;
-    int n3 = rand() % lim;
+    int n1 = (rand() % (lim-min))+min;
+    int n2 = (rand() % (lim-min))+min;
+    int n3 = (rand() % (lim-min))+min;
 
-    if((n1 <= n2 && n2 <= n3) || (n3 <= n2 && n2 <= n1)){
+    if((v[n1] <= v[n2] && v[n2] <= v[n3]) || (v[n3] <= v[n2] && v[n2] <= v[n1])){
         return n2;
     }
-    else if((n2 <= n1 && n1 <= n3) || (n3 <= n1 && n1 <= n2)){
+    else if((v[n2] <= v[n1] && v[n1] <= v[n3]) || (v[n3] <= v[n1] && v[n1] <= v[n2])){
         return n1;
     }
     else{
@@ -212,57 +212,58 @@ Info bubble_sort(int* v, int n)
 /**
 * @deprecated
 */
-Info quick_sort2(int* v, int inf, int sup){  //quick sort dps da primeira chamada
-
-
-    // int aux;
-
-    int indiceMediana = medianadeTres(sup);
+void quick_sort2(int* v, int inf, int sup, ui* comparisons, ui* swaps){  //quick sort dps da primeira chamada
+    /* adicionei os parâmetros comparisons e swaps apra contar nas chamadas recursivas, e são ponteiros pra mudar o valor da chamada inicial*/
+    int indiceMediana = medianadeTres(v, inf, sup);
     int pivo = v[indiceMediana];
 
     int i = inf;
     int j = sup;
     do{
         while(v[i] < pivo){
+            (*comparisons)++;
             i++;
         }
         while(v[j] > pivo){
+           (*comparisons)++;
             j--;
         }
-
         if(i <=j){
             swap(v, i, j);
+            (*swaps)++;
             i++;
-            j++;
+            j--;
         }
+        
     }while(i<j);
     if(j>inf){
-        quick_sort2(v, inf, j);
+        quick_sort2(v, inf, j, comparisons, swaps);
     }
     if(i<sup){
-        quick_sort2(v, i, sup);
+        quick_sort2(v, i, sup, comparisons, swaps);
     }
     // retornar struct Info ou definir a função para retornar void ou outra coisa
 }
 
 /**
-* @deprecated
-* arrumar função de index para pivo (retornar a posição cujo valor seja a mediana, não a mediana do index)
-* revisar variaveis não usadas no código
-* função quick_sort 2 define retorno da struct Info mas não retorna
-* testar código para ver se está certo e testar para diferentes tamanhos de n e modos (aleatorio, ordenado, inversamente ordenado)
+* @details
+* arrumei a mediana, agora manda o vetor e ela analisa os valores
+* revisei a variavel aux e as de tempo que estavam incompletas ou erradas
+* agora quicksort2 é void
+* testei e ta funcionando
 */
-Info quick_sort(int* v, int inf, int sup){  //mandar inf=0 quando chamar a funcao
+
+Info quick_sort(int* v, int sup){  
     ui comparisons = 0;
     ui swaps = 0;
     clock_t inicio = clock(); //inicio da marcação de tempo
 
-    //int aux; que variavel é essa? pra que serve? tá acusando como "unused variable"
+    //tirei a variavel aux, tinha colocado ela pq no codigo do manzato ele usa ela pra fazer o swap, aí esqueci de tirar
 
-    int indiceMediana = medianadeTres(sup);
+    int indiceMediana = medianadeTres(v,0, sup);
     int pivo = v[indiceMediana];
 
-    int i = inf;
+    int i = 0;
     int j = sup;
     do{
         while(v[i] < pivo){
@@ -275,17 +276,18 @@ Info quick_sort(int* v, int inf, int sup){  //mandar inf=0 quando chamar a funca
         }
 
         if(i <=j){
+            comparisons++;
             swap(v, i, j);
             swaps++;
             i++;
-            j++;
+            j--;
         }
     }while(i<j);
-    if(j>inf){
-        quick_sort2(v, inf, j);
+    if(j>0){
+        quick_sort2(v, 0, j, &comparisons, &swaps);
     }
     if(i<sup){
-        quick_sort2(v, i, sup);
+        quick_sort2(v, i, sup, &comparisons, &swaps);
     }
 
     clock_t fim = clock(); // fim da marcação de tempo
@@ -377,7 +379,10 @@ void print_nome_do_sort(int id_sort)
     case 2:
         printf("HEAP SORT\n\n");
         return;
-
+    
+    case 3:
+        printf("QUICK SORT\n\n");
+        return;
     default:
         fprintf(stderr, "ID de sort inválido.\n");
         return;
@@ -396,8 +401,8 @@ void mostrar_info(int* v, int n, int id_sort)
         case 2:
             sort_info = heap_sort(v, n);
             break;
-
-        default:
+        case 3:
+            sort_info = quick_sort(v, n);
     }
 
     printf("Comparacoes: %u\nSwaps: %u\nTempo decorrido: %.3lf %s.\n",
@@ -536,15 +541,17 @@ void testar_sort(int id_sort)
 
         switch (id_sort)
         {
-        case 1:
-            bubble_sort(v, n);
-            break;
+            case 1:
+                bubble_sort(v, n);
+                break;
 
-        case 2:
-            heap_sort(v, n);
-            break;
+            case 2:
+                heap_sort(v, n);
+                break;
 
-        default:
+            case 3:
+                quick_sort(v, n);
+                break;
         }
 
         print_vetor(v, n);
@@ -562,8 +569,9 @@ int main()
     * 1 = bubble sort
     * 2 = heap sort
     */
-    relatorio(1);
-    relatorio(2);
+    //relatorio(1);
+    //relatorio(2);
+    relatorio(3);
 
     return 0;
 }
