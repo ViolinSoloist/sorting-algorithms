@@ -386,6 +386,31 @@ Info insertion_sort(int *v, int n){
     return insort;
 }
 
+Info selection_sort(int *v, int n){
+    ui comparisons = 0;
+    ui swaps = 0;
+    clock_t inicio = clock(); //inicio da marcação de tempo
+
+    int i, j, min;
+    for (i = 0; i < (n-1); i++) {
+        min = i;
+        for (j = (i+1); j < n; j++) {
+            comparisons++;
+            if(v[j] < v[min]) {
+                min = j;
+            }
+        }
+        if (i != min) {
+            swap(v, i, min);
+            swaps++;
+        }
+    } 
+
+    clock_t fim = clock(); // fim da marcação de tempo
+    double tempo_gasto = (double)(fim - inicio) / CLOCKS_PER_SEC;
+    Info selecsort = {v, comparisons, swaps, tempo_gasto};
+    return selecsort;
+}
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 // PROCEDIMENTO (FUNÇÃO QUE NÃO RETORNA NADA) QUE VAI FAZER UM MINI "RELATORIO"
@@ -411,6 +436,9 @@ void print_nome_do_sort(int id_sort)
     case 4:
         printf("INSERTION SORT\n\n");
         return;
+    case 5:
+        printf("SELECTION SORT");
+        return;
     default:
         fprintf(stderr, "ID de sort inválido.\n");
         return;
@@ -434,6 +462,9 @@ void mostrar_info(int* v, int n, int id_sort)
             break;
         case 4:
             sort_info = insertion_sort(v, n);
+            break;
+        case 5:
+            sort_info = selection_sort(v, n);
             break;
     }
 
@@ -588,6 +619,9 @@ void testar_sort(int id_sort)
             case 4:
                 insertion_sort(v, n);
                 break;
+            case 5:
+                selection_sort(v, n);
+                break;
         }
         printf("Vetor ordenado:\n");
         print_vetor(v, n);
@@ -607,8 +641,8 @@ int main()
     */
     //relatorio(1);
     //relatorio(2);
-    //testar_sort(4);
-    relatorio(4);
+    //testar_sort(5);
+    relatorio(5);
 
     return 0;
 }
