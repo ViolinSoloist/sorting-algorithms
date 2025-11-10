@@ -209,9 +209,6 @@ Info bubble_sort(int* v, int n)
 }
 
 
-/**
-* @deprecated
-*/
 void quick_sort2(int* v, int inf, int sup, ui* comparisons, ui* swaps){  //quick sort dps da primeira chamada
     /* adicionei os parâmetros comparisons e swaps apra contar nas chamadas recursivas, e são ponteiros pra mudar o valor da chamada inicial*/
     int indiceMediana = medianadeTres(v, inf, sup);
@@ -234,7 +231,7 @@ void quick_sort2(int* v, int inf, int sup, ui* comparisons, ui* swaps){  //quick
             i++;
             j--;
         }
-        
+
     }while(i<j);
     if(j>inf){
         quick_sort2(v, inf, j, comparisons, swaps);
@@ -253,7 +250,7 @@ void quick_sort2(int* v, int inf, int sup, ui* comparisons, ui* swaps){  //quick
 * testei e ta funcionando
 */
 
-Info quick_sort(int* v, int sup){  
+Info quick_sort(int* v, int sup){
     ui comparisons = 0;
     ui swaps = 0;
     clock_t inicio = clock(); //inicio da marcação de tempo
@@ -404,7 +401,7 @@ Info selection_sort(int *v, int n){
             swap(v, i, min);
             swaps++;
         }
-    } 
+    }
 
     clock_t fim = clock(); // fim da marcação de tempo
     double tempo_gasto = (double)(fim - inicio) / CLOCKS_PER_SEC;
@@ -429,7 +426,7 @@ void print_nome_do_sort(int id_sort)
     case 2:
         printf("HEAP SORT\n\n");
         return;
-    
+
     case 3:
         printf("QUICK SORT\n\n");
         return;
@@ -638,11 +635,14 @@ int main()
     /**
     * 1 = bubble sort
     * 2 = heap sort
+    * 3 = quick
+    * 4 = insertion
+    * 5 = selection
     */
     //relatorio(1);
     //relatorio(2);
     //testar_sort(5);
-    relatorio(5);
+    relatorio(4);
 
     return 0;
 }
