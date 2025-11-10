@@ -41,10 +41,10 @@
 // vou deixar anotado todos os sorts, a gente vai marcando no final de cada linha os completos
 /**
  * Bubble Sort (feito)
- * Selection Sort
- * Insertion Sort
- * Shell Sort
- * Quick Sort
+ * Selection Sort (feito)
+ * Insertion Sort (feito)
+ * Shell Sort (feito)
+ * Quick Sort (feito)
  * Heap Sort (feito)
  * Merge Sort
  * Contagem dos Menores
@@ -408,6 +408,52 @@ Info selection_sort(int *v, int n){
     Info selecsort = {v, comparisons, swaps, tempo_gasto};
     return selecsort;
 }
+
+Info shell_sort(int *v, int n){
+    ui comparisons = 0;
+    ui swaps = 0;
+    clock_t inicio = clock(); //inicio da marcação de tempo
+
+    // --- GERAR OS INCREMENTOS (Sequência de Knuth) COM BASE EM N ---
+    int h = 1; //último incremento, sempre 1
+    int k = 0; //contagem
+
+    while (h < n) { // Conta quantos incrementos teremos
+        k++;
+        h = 3*h + 1; //sequência de Knuth
+    }
+
+    // Cria o vetor de incrementos com o número previsto
+    int inc[k];
+
+    // Gera novamente os incrementos, agora armazenando
+    h = 1;
+    for (int i = 0; i < k; i++) {
+        inc[i] = h;
+        h = 3*h + 1;
+    }
+
+    // --- ORDENAÇÃO ---
+    for (int incr = k - 1; incr >= 0; incr--) {
+        h = inc[incr];
+        for (int i = h; i < n; i++) {
+            int aux = v[i];
+            int j;
+            for (j = i - h; j >= 0 && v[j] > aux; j -= h) { //praticamente um insertion sort interno
+                comparisons++;
+                v[j + h] = v[j];
+                swaps++;
+            }
+            if (j >= 0) comparisons++;
+            v[j + h] = aux;
+        }
+    }
+
+    clock_t fim = clock(); // fim da marcação de tempo
+    double tempo_gasto = (double)(fim - inicio) / CLOCKS_PER_SEC;
+    Info shellsort = {v, comparisons, swaps, tempo_gasto};
+    return shellsort;
+}
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 // PROCEDIMENTO (FUNÇÃO QUE NÃO RETORNA NADA) QUE VAI FAZER UM MINI "RELATORIO"
@@ -430,12 +476,19 @@ void print_nome_do_sort(int id_sort)
     case 3:
         printf("QUICK SORT\n\n");
         return;
+
     case 4:
         printf("INSERTION SORT\n\n");
         return;
+
     case 5:
-        printf("SELECTION SORT");
+        printf("SELECTION SORT\n\n");
         return;
+
+    case 6:
+        printf("SHELL SORT\n\n");
+        return;
+
     default:
         fprintf(stderr, "ID de sort inválido.\n");
         return;
@@ -454,14 +507,21 @@ void mostrar_info(int* v, int n, int id_sort)
         case 2:
             sort_info = heap_sort(v, n);
             break;
+
         case 3:
             sort_info = quick_sort(v, n);
             break;
+
         case 4:
             sort_info = insertion_sort(v, n);
             break;
+
         case 5:
             sort_info = selection_sort(v, n);
+            break;
+
+        case 6:
+            sort_info = shell_sort(v, n);
             break;
     }
 
@@ -613,11 +673,17 @@ void testar_sort(int id_sort)
             case 3:
                 quick_sort(v, n);
                 break;
+
             case 4:
                 insertion_sort(v, n);
                 break;
+
             case 5:
                 selection_sort(v, n);
+                break;
+
+            case 6:
+                shell_sort(v, n);
                 break;
         }
         printf("Vetor ordenado:\n");
@@ -641,8 +707,8 @@ int main()
     */
     //relatorio(1);
     //relatorio(2);
-    //testar_sort(5);
-    relatorio(4);
+    //testar_sort(6);
+    relatorio(6);
 
     return 0;
 }
