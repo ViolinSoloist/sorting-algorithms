@@ -14,19 +14,19 @@
 
 /**
  * @attention em todos os sorts, criar e cuidar de contadores de:
- * n�mero de compara��es
- * n�mero de movimenta��es de registro
- * tempo de execu��o (usar biblioteca <time.h>)
+ * numero de comparacoes
+ * numero de movimentacoes de registro
+ * tempo de execucao (usar biblioteca <time.h>)
 */
 
 /**
- *  @attention a gente tamb�m vai precisar considerar vetores de tamanho 100, 1000, 10000 e 100000 elementos
- * mas s�o tr�s tipos de vetores
+ *  @attention a gente tambem vai precisar considerar vetores de tamanho 100, 1000, 10000 e 100000 elementos
+ * mas sao tres tipos de vetores
  *  1. ordenados
  *  2. Inversos
- *  3. aleat�rios
+ *  3. aleatorios
  *
- *  Tem duas op��es para isso (pode ter outras op��es, mas por enquanto s� pensei nessas duas
+ *  Tem duas opcoes para isso (pode ter outras opcoes, mas por enquanto s� pensei nessas duas
  * que parecem ser as melhores, se voc� tiver outra idea melhor pd falar tmb)
  *  @details a gente cria uma fun��o que cria um vetor de tamanho N com aloca��o din�mica (retorna ponteiro de ponteiro)
  * e da free conforme a gente for usando e deixando de usar, e usa stdlib pra ir preenchendo os vetores com n�meros aleat�rios
@@ -48,9 +48,9 @@
  * Shell Sort (feito)
  * Quick Sort (feito)
  * Heap Sort (feito)
- * Merge Sort
- * Contagem dos Menores
- * Radix Sort
+ * Merge Sort (feito)
+ * Contagem dos Menores (feito)
+ * Radix Sort (feito)
 */
 
 
@@ -424,7 +424,7 @@ Info insertion_sort(int *v, int n){
         v[j+1] = elem;
     }
 
-    clock_t fim = clock(); // fim da marca��o de tempo
+    clock_t fim = clock(); // fim da marcacao de tempo
     double tempo_gasto = (double)(fim - inicio) / CLOCKS_PER_SEC;
     Info insort = {v, comparisons, swaps, tempo_gasto};
     return insort;
@@ -433,7 +433,7 @@ Info insertion_sort(int *v, int n){
 Info selection_sort(int *v, int n){
     ui comparisons = 0;
     ui swaps = 0;
-    clock_t inicio = clock(); //inicio da marca��o de tempo
+    clock_t inicio = clock(); //inicio da marcacaoo de tempo
 
     int i, j, min;
     for (i = 0; i < (n-1); i++) {
@@ -496,7 +496,7 @@ Info shell_sort(int *v, int n){
         }
     }
 
-    clock_t fim = clock(); // fim da marca��o de tempo
+    clock_t fim = clock(); // fim da marcacaoo de tempo
     double tempo_gasto = (double)(fim - inicio) / CLOCKS_PER_SEC;
     Info shellsort = {v, comparisons, swaps, tempo_gasto};
     return shellsort;
@@ -512,7 +512,7 @@ Info radix_sort(int* v, int n)
     for (int i=0; i<10; i++)
         vetor_de_filas[i] = q_new();
 
-    // repete k vezes, sendo k o n�mero de d�gitos do maior valor
+    // repete k vezes, sendo k o número de d�gitos do maior valor
     for (int i=0; i<qntd_digitos(biggest); i++)
     {
         // itera por todos os index do vetor
@@ -553,14 +553,14 @@ void merge_mesclar(int *v, int min, int meio, int max, ui*comparisons, ui*swaps)
     int esq[n1], dir[n2]; //espaço de memória auxiliar: n, no total
 
     ///copiando os valores para os vetores auxiliares
-    for(i=0; i<n1; i++){ 
+    for(i=0; i<n1; i++){
         esq[i] = v[min+i];
     }
     for(j=0; j<n2; j++){
         dir[j] = v[meio+1+j];
     }
 
-    i=0; j=0; 
+    i=0; j=0;
     k=min; //indice do vetor remontado
     while(i<n1 && j<n2){
         if(esq[i] <= dir[j]){
@@ -583,7 +583,7 @@ void merge_mesclar(int *v, int min, int meio, int max, ui*comparisons, ui*swaps)
         i++;
         k++;
     }
-    while(j<n2){ 
+    while(j<n2){
         v[k] = dir[j];
         j++;
         k++;
@@ -609,15 +609,50 @@ Info merge_sort(int *v, int n){
 
     merge_dividir(v, 0, n-1, &comparisons, &swaps);
 
-    clock_t fim = clock(); // fim da marca��o de tempo
+    clock_t fim = clock(); // fim da marcacao de tempo
     double tempo_gasto = (double)(fim - inicio) / CLOCKS_PER_SEC;
     Info mergesort = {v, comparisons, swaps, tempo_gasto};
     return mergesort;
 }
 
+void contagem_menores_sort(int* v, int n)
+{
+    int qntd_menores[n]; int copia_auxiliar[n];
+
+    // itera por todos os indices (menos o primeiro).
+    // para cada indice, itera  sobre todos os indices passados
+    // (se está na posição i, itera de 0 até )
+
+    // inicicializar vetor qntd_menores
+    for (int i=0; i<n; i++)
+        qntd_menores[i]=0;
+
+    for (int i=1; i<n; i++)
+    {
+        for (int j=i-1; j>=0; j--)
+        {
+            if (v[i] < v[j]) {
+                qntd_menores[j]++;
+            } else{
+                qntd_menores[i]++;
+            }
+        }
+    }
+
+    // qntd_menores tem como seus valores, index para posição respectiva de v[i] na ordem final
+    for (int i=0; i<n; i++)
+        copia_auxiliar[qntd_menores[i]] = v[i];
+
+    // como já temos um vetor alocado dinamicamente, compensa copiadr de volta pra ele
+    for (int i=0; i<n; i++)
+        v[i] = copia_auxiliar[i];
+
+    return;
+}
+
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
-// PROCEDIMENTO (FUN��O QUE N�O RETORNA NADA) QUE VAI FAZER UM MINI "RELATORIO"
+// PROCEDIMENTO (FUNCAO QUE NAO RETORNA NADA) QUE VAI FAZER UM MINI "RELATORIO"
 // SORTAR PARA DIFERENTES N E MODOS
 
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -696,13 +731,13 @@ void mostrar_info(int* v, int n, int id_sort)
         case 7:
             sort_info = radix_sort(v, n);
             break;
-        
+
         case 8:
             sort_info = merge_sort(v, n);
             break;
 
         default:
-            fprintf(stderr, "ID n�o definido para sort.\n");
+            fprintf(stderr, "ID nao definido para sort.\n");
     }
 
     printf("Comparacoes: %u\nSwaps: %u\nTempo decorrido: %.3lf %s.\n",
@@ -731,7 +766,7 @@ void do_5_calls_v_rand(int n, int id_sort)
 {
     int* v = make_rand_vector(n);
     if (v == NULL) {
-        fprintf(stderr, "Falha na aloca��o de mem�ria para vetor de tamanho %d.\n", n);
+        fprintf(stderr, "Falha na alocacao de memoria para vetor de tamanho %d.\n", n);
         return;
     }
 
@@ -796,7 +831,7 @@ void relatorio(int id_sort) /** @param recebe id de qual sort vai ser analisado*
         // e usar realloc � paia dms
         int* v_sorted = make_ordered_vector(tam_v_atual);
         if (v_sorted == NULL) {
-            fprintf(stderr, "Falha na aloca��o de mem�ria para vetor de tamanho %d.\n", tam_v_atual);
+            fprintf(stderr, "Falha na alocacao de memoria para vetor de tamanho %d.\n", tam_v_atual);
             return;
         }
         printf("Tamanho: %d\n", tam_v_atual);
@@ -833,6 +868,12 @@ void testar_sort(int id_sort)
 {
     const int n = 30;
     int* v = make_rand_vector(n);
+
+    if (v == NULL)
+    {
+        fprintf(stderr, "Falha na alocação de memória para testes de sort.\n");
+        return;
+    }
 
     for (int i=0; i<5; i++)
     {
@@ -873,6 +914,10 @@ void testar_sort(int id_sort)
             case 8:
                 merge_sort(v, n);
                 break;
+
+            case 9:
+                contagem_menores_sort(v, n);
+                break;
         }
 
         printf("Vetor ordenado:\n");
@@ -894,9 +939,12 @@ int main()
     * 4 = insertion
     * 5 = selection
     * 6 = shell
+    * 7 = radix
+    * 8 = merge
+    * 9 = contagem menores
     */
-    relatorio(8);
-    //testar_sort(8);
+    relatorio(9);
+    // testar_sort(9);
 
     return 0;
 }
