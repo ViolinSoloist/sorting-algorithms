@@ -14,29 +14,29 @@
 
 /**
  * @attention em todos os sorts, criar e cuidar de contadores de:
- * número de comparações
- * número de movimentações de registro
- * tempo de execução (usar biblioteca <time.h>)
+ * nï¿½mero de comparaï¿½ï¿½es
+ * nï¿½mero de movimentaï¿½ï¿½es de registro
+ * tempo de execuï¿½ï¿½o (usar biblioteca <time.h>)
 */
 
 /**
- *  @attention a gente também vai precisar considerar vetores de tamanho 100, 1000, 10000 e 100000 elementos
- * mas são três tipos de vetores
+ *  @attention a gente tambï¿½m vai precisar considerar vetores de tamanho 100, 1000, 10000 e 100000 elementos
+ * mas sï¿½o trï¿½s tipos de vetores
  *  1. ordenados
  *  2. Inversos
- *  3. aleatórios
+ *  3. aleatï¿½rios
  *
- *  Tem duas opções para isso (pode ter outras opções, mas por enquanto só pensei nessas duas
- * que parecem ser as melhores, se você tiver outra idea melhor pd falar tmb)
- *  @details a gente cria uma função que cria um vetor de tamanho N com alocação dinâmica (retorna ponteiro de ponteiro)
- * e da free conforme a gente for usando e deixando de usar, e usa stdlib pra ir preenchendo os vetores com números aleatórios
- * (não importa quando for ordenado ou inverso porque a gente faz um for loop incrementando ou decrementando, não faz diferença)
+ *  Tem duas opï¿½ï¿½es para isso (pode ter outras opï¿½ï¿½es, mas por enquanto sï¿½ pensei nessas duas
+ * que parecem ser as melhores, se vocï¿½ tiver outra idea melhor pd falar tmb)
+ *  @details a gente cria uma funï¿½ï¿½o que cria um vetor de tamanho N com alocaï¿½ï¿½o dinï¿½mica (retorna ponteiro de ponteiro)
+ * e da free conforme a gente for usando e deixando de usar, e usa stdlib pra ir preenchendo os vetores com nï¿½meros aleatï¿½rios
+ * (nï¿½o importa quando for ordenado ou inverso porque a gente faz um for loop incrementando ou decrementando, nï¿½o faz diferenï¿½a)
  *
- *  @details criamos novos arquivos de entrada (ex: 1.in, 2.in) que são literalmente uma linha com a quantidade de números
- * e na hora de executar o código a gente passa o arquivo como entrada, em vez de fornecer a entrada do teclado
+ *  @details criamos novos arquivos de entrada (ex: 1.in, 2.in) que sï¿½o literalmente uma linha com a quantidade de nï¿½meros
+ * e na hora de executar o cï¿½digo a gente passa o arquivo como entrada, em vez de fornecer a entrada do teclado
  *  (Ex: ./a.out < 1.in) no linux
  *  Mas a gente teria que pedir pra IA gerar os arquivos
- *  MAS não teria dor de cabeça de mexer com ponteiros e principalmetne lidar com todos os free()'s que a gente vai ter que
+ *  MAS nï¿½o teria dor de cabeï¿½a de mexer com ponteiros e principalmetne lidar com todos os free()'s que a gente vai ter que
  * lembrar e usar
 */
 
@@ -55,24 +55,24 @@
 
 
 // ------------------------------------------
-//            FUNÇÕES AUXILIARES
+//            FUNï¿½ï¿½ES AUXILIARES
 // ------------------------------------------
 /**
- * @attention tem que ter a mesma quantidade de free()'s que tem essa função chamada na main
- * @details como devemos testar cada método de ordenação com diferentes quantidades de vetores com diferentes tamanhos,
- * é inteligente fazer uma função que trate a geração desses vetores
+ * @attention tem que ter a mesma quantidade de free()'s que tem essa funï¿½ï¿½o chamada na main
+ * @details como devemos testar cada mï¿½todo de ordenaï¿½ï¿½o com diferentes quantidades de vetores com diferentes tamanhos,
+ * ï¿½ inteligente fazer uma funï¿½ï¿½o que trate a geraï¿½ï¿½o desses vetores
  * recebe o tamanho do vetor @param n numero de elementos
  * @return ponteiro pra array de inteiros alocados dinamicamente.
  */
 int* make_rand_vector(int n)
 {
     int* v = (int*)calloc(n, sizeof(int)); // v inicia com 0 em todos index, eu acho
-    //  acho que a gente não precisa fazer uma função pros vetores
+    //  acho que a gente nï¿½o precisa fazer uma funï¿½ï¿½o pros vetores
     //  a gente pdoe criar eles com malloc, no caso os 4 vetores de 100 1000 e tal e resetar o valor deles pra cada sort
-    // sim sim, a função seria só pra deixar mais claro, mas seria só pra gerar esses 4 vetores, em vez de deixar na main
+    // sim sim, a funï¿½ï¿½o seria sï¿½ pra deixar mais claro, mas seria sï¿½ pra gerar esses 4 vetores, em vez de deixar na main
 
     if (v != NULL) {
-        // TODO <stdlib.h> rand() preencher com números aleatórios
+        // TODO <stdlib.h> rand() preencher com nï¿½meros aleatï¿½rios
         srand(time(NULL)); //seed
 
         int maximo = (int)(n * 1.2);
@@ -122,8 +122,8 @@ int* make_reversed_sorted_vector(int n)
 
 
 /**
- * @brief função que realiza swap entre dois registros de um vetor
- * recebe o vetor, e as posições em index (0-indexado) que serão trocadas de lugar
+ * @brief funï¿½ï¿½o que realiza swap entre dois registros de um vetor
+ * recebe o vetor, e as posiï¿½ï¿½es em index (0-indexado) que serï¿½o trocadas de lugar
  * @
  */
 void swap(int* v, int a, int b)
@@ -180,7 +180,7 @@ int qntd_digitos(int num)
 
 int i_esimo_digito(int num, int i)
 {
-    // retorna os "zeros à esquerda" também se o index passar
+    // retorna os "zeros ï¿½ esquerda" tambï¿½m se o index passar
     // ex 025, i = 2 retorna 0
     if (i >= qntd_digitos(num)) return 0;
     // 2346, i = 2 retorna 3
@@ -205,19 +205,19 @@ int maior_valor(int* v, int n)
 }
 /**
  * $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
- *                 FUNÇÕES DE ORDENAÇÃO
+ *                 FUNï¿½ï¿½ES DE ORDENAï¿½ï¿½O
  * $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
  *
- * @details cada função de ordenação @returns uma struct, contendo:
- * - ponteiro para vetor pós-ordenação (alocado dinamicamente)
- * - inteiro que representa o número de comparações realizadas
- * - inteiro representando número de movimentações de registros (provavelmente swaps?)
- * - float representando tempo de execução até terminar a ordenação
+ * @details cada funï¿½ï¿½o de ordenaï¿½ï¿½o @returns uma struct, contendo:
+ * - ponteiro para vetor pï¿½s-ordenaï¿½ï¿½o (alocado dinamicamente)
+ * - inteiro que representa o nï¿½mero de comparaï¿½ï¿½es realizadas
+ * - inteiro representando nï¿½mero de movimentaï¿½ï¿½es de registros (provavelmente swaps?)
+ * - float representando tempo de execuï¿½ï¿½o atï¿½ terminar a ordenaï¿½ï¿½o
  *
- * @attention uso de struct não é necessário, mas ajuda a modularizar o código
- * @deprecated por enquanto, é só isso, mas é importante lembrar que a gente vai ter que
- * guardar todas essas informações para todos os tamanhos de vetores e para cada tamanho,
- * todas as formas de registros originais (ordenado, aleatório, inversamente ordenado)
+ * @attention uso de struct nï¿½o ï¿½ necessï¿½rio, mas ajuda a modularizar o cï¿½digo
+ * @deprecated por enquanto, ï¿½ sï¿½ isso, mas ï¿½ importante lembrar que a gente vai ter que
+ * guardar todas essas informaï¿½ï¿½es para todos os tamanhos de vetores e para cada tamanho,
+ * todas as formas de registros originais (ordenado, aleatï¿½rio, inversamente ordenado)
 */
 
 typedef struct info_ {
@@ -232,23 +232,23 @@ Info bubble_sort(int* v, int n)
 {
     ui comparisons = 0;
     ui swaps = 0;
-    clock_t inicio = clock(); //inicio da marcação de tempo
+    clock_t inicio = clock(); //inicio da marcaï¿½ï¿½o de tempo
 
 
     for(int i=0; i<n-1; i++)
     {
         for(int j=0; j<n-1-i; j++)
         {
-            comparisons++; // if que verifica se o registro atual é maior que o próximo registro
+            comparisons++; // if que verifica se o registro atual ï¿½ maior que o prï¿½ximo registro
             if(v[j] > v[j+1]) {
                 swaps++; // sempre que tem swap incrimenta
                 swap(v, j, j+1);
             }
         }
-        if (!swaps) break; //se nenhum movimento é feito quer dizer que já está ordenado
+        if (!swaps) break; //se nenhum movimento ï¿½ feito quer dizer que jï¿½ estï¿½ ordenado
     }
 
-    clock_t fim = clock(); // fim da marcação de tempo
+    clock_t fim = clock(); // fim da marcaï¿½ï¿½o de tempo
     double tempo_gasto = (double)(fim - inicio) / CLOCKS_PER_SEC;
 
     Info bbs_info = {v, comparisons, swaps, tempo_gasto};
@@ -257,7 +257,7 @@ Info bubble_sort(int* v, int n)
 
 
 void quick_sort2(int* v, int inf, int sup, ui* comparisons, ui* swaps){  //quick sort dps da primeira chamada
-    /* adicionei os parâmetros comparisons e swaps apra contar nas chamadas recursivas, e são ponteiros pra mudar o valor da chamada inicial*/
+    /* adicionei os parï¿½metros comparisons e swaps apra contar nas chamadas recursivas, e sï¿½o ponteiros pra mudar o valor da chamada inicial*/
     int indiceMediana = medianadeTres(v, inf, sup);
     int pivo = v[indiceMediana];
 
@@ -286,23 +286,23 @@ void quick_sort2(int* v, int inf, int sup, ui* comparisons, ui* swaps){  //quick
     if(i<sup){
         quick_sort2(v, i, sup, comparisons, swaps);
     }
-    // retornar struct Info ou definir a função para retornar void ou outra coisa
+    // retornar struct Info ou definir a funï¿½ï¿½o para retornar void ou outra coisa
 }
 
 /**
 * @details
 * arrumei a mediana, agora manda o vetor e ela analisa os valores
 * revisei a variavel aux e as de tempo que estavam incompletas ou erradas
-* agora quicksort2 é void
+* agora quicksort2 ï¿½ void
 * testei e ta funcionando
 */
 
 Info quick_sort(int* v, int sup){
     ui comparisons = 0;
     ui swaps = 0;
-    clock_t inicio = clock(); //inicio da marcação de tempo
+    clock_t inicio = clock(); //inicio da marcaï¿½ï¿½o de tempo
 
-    //tirei a variavel aux, tinha colocado ela pq no codigo do manzato ele usa ela pra fazer o swap, aí esqueci de tirar
+    //tirei a variavel aux, tinha colocado ela pq no codigo do manzato ele usa ela pra fazer o swap, aï¿½ esqueci de tirar
 
     int indiceMediana = medianadeTres(v,0, sup);
     int pivo = v[indiceMediana];
@@ -334,7 +334,7 @@ Info quick_sort(int* v, int sup){
         quick_sort2(v, i, sup, &comparisons, &swaps);
     }
 
-    clock_t fim = clock(); // fim da marcação de tempo
+    clock_t fim = clock(); // fim da marcaï¿½ï¿½o de tempo
     double tempo_gasto = (double)(fim - inicio) / CLOCKS_PER_SEC;
     Info qsort = {v, comparisons, swaps, tempo_gasto};
     return qsort;
@@ -344,7 +344,7 @@ Info quick_sort(int* v, int sup){
 
 
 /**
-* @brief reorganiza a heap a partir de um nó "i" e propaga até a raíz, no máximo
+* @brief reorganiza a heap a partir de um nï¿½ "i" e propaga atï¿½ a raï¿½z, no mï¿½ximo
 */
 Info balance_heap(int* v, int n, int i, Info info)
 {
@@ -384,7 +384,7 @@ Info make_heap(int *v, int n, Info hp_sort)
 Info heap_sort(int* v, int n)
 {
     Info hp_sort = {v, 0, 0, 0.0};
-    clock_t inicio = clock(); //inicio da marcação de tempo
+    clock_t inicio = clock(); //inicio da marcaï¿½ï¿½o de tempo
 
     hp_sort = make_heap(v, n, hp_sort);
     while (--n)
@@ -395,7 +395,7 @@ Info heap_sort(int* v, int n)
         hp_sort = balance_heap(v, n, 0, hp_sort);
     }
 
-    clock_t fim = clock(); // fim da marcação de tempo
+    clock_t fim = clock(); // fim da marcaï¿½ï¿½o de tempo
     double tempo_gasto = (double)(fim - inicio) / CLOCKS_PER_SEC;
 
     hp_sort.execution_time = tempo_gasto;
@@ -406,7 +406,7 @@ Info heap_sort(int* v, int n)
 Info insertion_sort(int *v, int n){
     ui comparisons = 0;
     ui swaps = 0;
-    clock_t inicio = clock(); //inicio da marcação de tempo
+    clock_t inicio = clock(); //inicio da marcaï¿½ï¿½o de tempo
 
     int i, j, elem;
 
@@ -424,7 +424,7 @@ Info insertion_sort(int *v, int n){
         v[j+1] = elem;
     }
 
-    clock_t fim = clock(); // fim da marcação de tempo
+    clock_t fim = clock(); // fim da marcaï¿½ï¿½o de tempo
     double tempo_gasto = (double)(fim - inicio) / CLOCKS_PER_SEC;
     Info insort = {v, comparisons, swaps, tempo_gasto};
     return insort;
@@ -433,7 +433,7 @@ Info insertion_sort(int *v, int n){
 Info selection_sort(int *v, int n){
     ui comparisons = 0;
     ui swaps = 0;
-    clock_t inicio = clock(); //inicio da marcação de tempo
+    clock_t inicio = clock(); //inicio da marcaï¿½ï¿½o de tempo
 
     int i, j, min;
     for (i = 0; i < (n-1); i++) {
@@ -450,7 +450,7 @@ Info selection_sort(int *v, int n){
         }
     }
 
-    clock_t fim = clock(); // fim da marcação de tempo
+    clock_t fim = clock(); // fim da marcaï¿½ï¿½o de tempo
     double tempo_gasto = (double)(fim - inicio) / CLOCKS_PER_SEC;
     Info selecsort = {v, comparisons, swaps, tempo_gasto};
     return selecsort;
@@ -459,18 +459,18 @@ Info selection_sort(int *v, int n){
 Info shell_sort(int *v, int n){
     ui comparisons = 0;
     ui swaps = 0;
-    clock_t inicio = clock(); //inicio da marcação de tempo
+    clock_t inicio = clock(); //inicio da marcaï¿½ï¿½o de tempo
 
-    // --- GERAR OS INCREMENTOS (Sequência de Knuth) COM BASE EM N ---
-    int h = 1; //último incremento, sempre 1
+    // --- GERAR OS INCREMENTOS (Sequï¿½ncia de Knuth) COM BASE EM N ---
+    int h = 1; //ï¿½ltimo incremento, sempre 1
     int k = 0; //contagem
 
     while (h < n) { // Conta quantos incrementos teremos
         k++;
-        h = 3*h + 1; //sequência de Knuth
+        h = 3*h + 1; //sequï¿½ncia de Knuth
     }
 
-    // Cria o vetor de incrementos com o número previsto
+    // Cria o vetor de incrementos com o nï¿½mero previsto
     int inc[k];
 
     // Gera novamente os incrementos, agora armazenando
@@ -480,7 +480,7 @@ Info shell_sort(int *v, int n){
         h = 3*h + 1;
     }
 
-    // --- ORDENAÇÃO ---
+    // --- ORDENAï¿½ï¿½O ---
     for (int incr = k - 1; incr >= 0; incr--) {
         h = inc[incr];
         for (int i = h; i < n; i++) {
@@ -496,12 +496,12 @@ Info shell_sort(int *v, int n){
         }
     }
 
-    clock_t fim = clock(); // fim da marcação de tempo
+    clock_t fim = clock(); // fim da marcaï¿½ï¿½o de tempo
     double tempo_gasto = (double)(fim - inicio) / CLOCKS_PER_SEC;
     Info shellsort = {v, comparisons, swaps, tempo_gasto};
     return shellsort;
 }
-// {vetor, comparações, swaps, tempo}
+// {vetor, comparaï¿½ï¿½es, swaps, tempo}
 Info radix_sort(int* v, int n)
 {
     Info rdx = {v, 0, 0, 0.0};
@@ -512,7 +512,7 @@ Info radix_sort(int* v, int n)
     for (int i=0; i<10; i++)
         vetor_de_filas[i] = q_new();
 
-    // repete k vezes, sendo k o número de dígitos do maior valor
+    // repete k vezes, sendo k o nï¿½mero de dï¿½gitos do maior valor
     for (int i=0; i<qntd_digitos(biggest); i++)
     {
         // itera por todos os index do vetor
@@ -534,21 +534,90 @@ Info radix_sort(int* v, int n)
         }
     }
 
-    // liberar memória alocada paras filas
+    // liberar memï¿½ria alocada paras filas
     for(int i=0; i<10; i++)
         q_del(&(vetor_de_filas[i]));
 
-    clock_t fim = clock(); // fim da marcação de tempo
+    clock_t fim = clock(); // fim da marcaï¿½ï¿½o de tempo
     double tempo_gasto = (double)(fim - inicio) / CLOCKS_PER_SEC;
 
     rdx.execution_time = tempo_gasto;
     return rdx;
 }
 
+void merge_mesclar(int *v, int min, int meio, int max, ui*comparisons, ui*swaps){
+    int i, j, k; //auxiliares
+    int n1 = meio - min + 1; //primeiro vetor
+    int n2 = max - meio; //segundo vetor
+
+    int esq[n1], dir[n2]; //espaÃ§o de memÃ³ria auxiliar: n, no total
+
+    ///copiando os valores para os vetores auxiliares
+    for(i=0; i<n1; i++){ 
+        esq[i] = v[min+i];
+    }
+    for(j=0; j<n2; j++){
+        dir[j] = v[meio+1+j];
+    }
+
+    i=0; j=0; 
+    k=min; //indice do vetor remontado
+    while(i<n1 && j<n2){
+        if(esq[i] <= dir[j]){
+            (*comparisons)++;
+            v[k] = esq[i];
+            i++;
+            (*swaps)++;
+        }
+        else{
+            (*comparisons)++;
+            v[k] = dir[j];
+            j++;
+            (*swaps)++;
+        }
+        k++;
+    }
+
+    while(i<n1){ //garante que nao sobrou
+        v[k] = esq[i];
+        i++;
+        k++;
+    }
+    while(j<n2){ 
+        v[k] = dir[j];
+        j++;
+        k++;
+    }
+}
+
+void merge_dividir(int *v, int min, int max, ui*comparisons, ui*swaps){
+
+    if(min < max){
+        int meio = min + ((max-min)/2);
+
+        merge_dividir(v, min, meio, comparisons, swaps);
+        merge_dividir(v, meio+1, max, comparisons, swaps);
+
+        merge_mesclar(v, min, meio, max, comparisons, swaps);
+    }
+}
+
+Info merge_sort(int *v, int n){
+    ui comparisons = 0;
+    ui swaps = 0;
+    clock_t inicio = clock();
+
+    merge_dividir(v, 0, n-1, &comparisons, &swaps);
+
+    clock_t fim = clock(); // fim da marcaï¿½ï¿½o de tempo
+    double tempo_gasto = (double)(fim - inicio) / CLOCKS_PER_SEC;
+    Info mergesort = {v, comparisons, swaps, tempo_gasto};
+    return mergesort;
+}
 
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
-// PROCEDIMENTO (FUNÇÃO QUE NÃO RETORNA NADA) QUE VAI FAZER UM MINI "RELATORIO"
+// PROCEDIMENTO (FUNï¿½ï¿½O QUE Nï¿½O RETORNA NADA) QUE VAI FAZER UM MINI "RELATORIO"
 // SORTAR PARA DIFERENTES N E MODOS
 
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -585,8 +654,12 @@ void print_nome_do_sort(int id_sort)
         printf("RADIX SORT\n\n");
         return;
 
+    case 8:
+        printf("MERGE SORT\n\n");
+        return;
+
     default:
-        fprintf(stderr, "ID de sort inválido.\n");
+        fprintf(stderr, "ID de sort invï¿½lido.\n");
         return;
     }
 }
@@ -623,9 +696,13 @@ void mostrar_info(int* v, int n, int id_sort)
         case 7:
             sort_info = radix_sort(v, n);
             break;
+        
+        case 8:
+            sort_info = merge_sort(v, n);
+            break;
 
         default:
-            fprintf(stderr, "ID não definido para sort.\n");
+            fprintf(stderr, "ID nï¿½o definido para sort.\n");
     }
 
     printf("Comparacoes: %u\nSwaps: %u\nTempo decorrido: %.3lf %s.\n",
@@ -654,7 +731,7 @@ void do_5_calls_v_rand(int n, int id_sort)
 {
     int* v = make_rand_vector(n);
     if (v == NULL) {
-        fprintf(stderr, "Falha na alocação de memória para vetor de tamanho %d.\n", n);
+        fprintf(stderr, "Falha na alocaï¿½ï¿½o de memï¿½ria para vetor de tamanho %d.\n", n);
         return;
     }
 
@@ -662,8 +739,8 @@ void do_5_calls_v_rand(int n, int id_sort)
 
     for (int j=0; j<5; j++)
     {
-        // a primeira vez já tá aleatório, mas nas outras vezes precisa aleatorizar de novo
-        // (poderia fazer free e malloc todas as vezes, mas melhor não)
+        // a primeira vez jï¿½ tï¿½ aleatï¿½rio, mas nas outras vezes precisa aleatorizar de novo
+        // (poderia fazer free e malloc todas as vezes, mas melhor nï¿½o)
         if (j!=0)
             randomize_vector(v, n);
 
@@ -700,7 +777,7 @@ void relatorio(int id_sort) /** @param recebe id de qual sort vai ser analisado*
             printf("Vai demorar um pouco menos de 2 min para mostrar todos os 5 vetores ordenados.\n\n");
         }
 
-        // condição temporária (pra poder testar n = 100000 com outros modos, mas não com esse se não vai demorar muito)
+        // condiï¿½ï¿½o temporï¿½ria (pra poder testar n = 100000 com outros modos, mas nï¿½o com esse se nï¿½o vai demorar muito)
         // if (tam_v_atual != 100000)
             do_5_calls_v_rand(tam_v_atual, id_sort);
 
@@ -714,12 +791,12 @@ void relatorio(int id_sort) /** @param recebe id de qual sort vai ser analisado*
     {
         int tam_v_atual = tamanhos_de_teste[i];
 
-        // alocação dinamica para criar vetor em cada loop
-        // (não faço um único porque pra cada loop, o tamanho muda)
-        // e usar realloc é paia dms
+        // alocaï¿½ï¿½o dinamica para criar vetor em cada loop
+        // (nï¿½o faï¿½o um ï¿½nico porque pra cada loop, o tamanho muda)
+        // e usar realloc ï¿½ paia dms
         int* v_sorted = make_ordered_vector(tam_v_atual);
         if (v_sorted == NULL) {
-            fprintf(stderr, "Falha na alocação de memória para vetor de tamanho %d.\n", tam_v_atual);
+            fprintf(stderr, "Falha na alocaï¿½ï¿½o de memï¿½ria para vetor de tamanho %d.\n", tam_v_atual);
             return;
         }
         printf("Tamanho: %d\n", tam_v_atual);
@@ -738,7 +815,7 @@ void relatorio(int id_sort) /** @param recebe id de qual sort vai ser analisado*
 
         int* vetor = make_reversed_sorted_vector(tam_v_atual);
         if (vetor == NULL) {
-            fprintf(stderr, "Falha na alocação de memória para vetor de tamanho %d.\n", tam_v_atual);
+            fprintf(stderr, "Falha na alocaï¿½ï¿½o de memï¿½ria para vetor de tamanho %d.\n", tam_v_atual);
             return;
         }
         printf("Tamanho: %d\n", tam_v_atual);
@@ -792,6 +869,10 @@ void testar_sort(int id_sort)
             case 7:
                 radix_sort(v, n);
                 break;
+
+            case 8:
+                merge_sort(v, n);
+                break;
         }
 
         printf("Vetor ordenado:\n");
@@ -804,7 +885,7 @@ void testar_sort(int id_sort)
 
 int main()
 {
-    srand(time(NULL)); // iniciando o gerador de números aleatórios
+    srand(time(NULL)); // iniciando o gerador de nï¿½meros aleatï¿½rios
 
     /**
     * 1 = bubble sort
@@ -814,7 +895,8 @@ int main()
     * 5 = selection
     * 6 = shell
     */
-    relatorio(7);
+    relatorio(8);
+    //testar_sort(8);
 
     return 0;
 }
