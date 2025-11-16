@@ -501,7 +501,7 @@ Info shell_sort(int *v, int n){
     Info shellsort = {v, comparisons, swaps, tempo_gasto};
     return shellsort;
 }
-// {vetor, compara��es, swaps, tempo}
+// {vetor, comparações, swaps, tempo}
 Info radix_sort(int* v, int n)
 {
     Info rdx = {v, 0, 0, 0.0};
@@ -534,11 +534,11 @@ Info radix_sort(int* v, int n)
         }
     }
 
-    // liberar mem�ria alocada paras filas
+    // liberar memória alocada paras filas
     for(int i=0; i<10; i++)
         q_del(&(vetor_de_filas[i]));
 
-    clock_t fim = clock(); // fim da marca��o de tempo
+    clock_t fim = clock(); // fim da marcacão de tempo
     double tempo_gasto = (double)(fim - inicio) / CLOCKS_PER_SEC;
 
     rdx.execution_time = tempo_gasto;
@@ -615,8 +615,12 @@ Info merge_sort(int *v, int n){
     return mergesort;
 }
 
-void contagem_menores_sort(int* v, int n)
+// {vetor, comparações, swaps, tempo}
+Info contagem_menores_sort(int* v, int n)
 {
+    Info cm_info = {v, 0, 0, 0.0};
+    clock_t inicio = clock();
+
     int qntd_menores[n]; int copia_auxiliar[n];
 
     // itera por todos os indices (menos o primeiro).
@@ -631,6 +635,7 @@ void contagem_menores_sort(int* v, int n)
     {
         for (int j=i-1; j>=0; j--)
         {
+            cm_info.comparisons++;
             if (v[i] < v[j]) {
                 qntd_menores[j]++;
             } else{
@@ -645,9 +650,17 @@ void contagem_menores_sort(int* v, int n)
 
     // como já temos um vetor alocado dinamicamente, compensa copiadr de volta pra ele
     for (int i=0; i<n; i++)
+    {
+        cm_info.swaps++;
         v[i] = copia_auxiliar[i];
+    }
 
-    return;
+    clock_t fim = clock();
+    double tempo_gasto = (double)(fim - inicio) / CLOCKS_PER_SEC;
+
+    cm_info.execution_time = tempo_gasto;
+
+    return cm_info;
 }
 
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -693,8 +706,12 @@ void print_nome_do_sort(int id_sort)
         printf("MERGE SORT\n\n");
         return;
 
+    case 9:
+        printf("CONTAGEM DOS MENORES\n\n");
+        return;
+
     default:
-        fprintf(stderr, "ID de sort inv�lido.\n");
+        fprintf(stderr, "ID de sort inválido.\n");
         return;
     }
 }
@@ -734,6 +751,10 @@ void mostrar_info(int* v, int n, int id_sort)
 
         case 8:
             sort_info = merge_sort(v, n);
+            break;
+
+        case 9:
+            sort_info = contagem_menores_sort(v, n);
             break;
 
         default:
@@ -875,6 +896,8 @@ void testar_sort(int id_sort)
         return;
     }
 
+    print_nome_do_sort(id_sort);
+
     for (int i=0; i<5; i++)
     {
         if (i!=0) randomize_vector(v, n);
@@ -944,7 +967,7 @@ int main()
     * 9 = contagem menores
     */
     relatorio(9);
-    // testar_sort(9);
+    //testar_sort(9);
 
     return 0;
 }
