@@ -353,10 +353,16 @@ Info balance_heap(int* v, int n, int i, Info info)
 
     int maior = i;
 
-    hp_info.comparisons++;
-    if (left < n && v[left] > v[i]) maior = left;
-    hp_info.comparisons++;
-    if (right < n && v[right] > v[maior]) maior = right;
+    if (left < n) {
+        hp_info.comparisons++;
+        if (v[left] > v[i]) maior = left;
+    }
+
+    if (right < n) {
+        hp_info.comparisons++;
+        if (v[right] > v[maior]) maior = right;
+    }
+
 
     if (maior != i) {
         hp_info.swaps++;
@@ -500,10 +506,12 @@ Info shell_sort(int *v, int n){
     return shellsort;
 }
 // {vetor, comparações, swaps, tempo}
+// SEM COMPARAÇÕES, APENAS MOVIMENTOS DE REGISTROS
 Info radix_sort(int* v, int n)
 {
     Info rdx = {v, 0, 0, 0.0};
     clock_t inicio = clock();
+
     int biggest = maior_valor(v, n);
     QUEUE* vetor_de_filas[10];
 
@@ -516,6 +524,7 @@ Info radix_sort(int* v, int n)
         // itera por todos os index do vetor
         for (int j=0; j<n; j++)
         {
+            rdx.swaps++;
             if ( !q_insert(vetor_de_filas[i_esimo_digito(v[j],i)], v[j]) )
                 fprintf(stderr, "Falha ao inserir itens na fila. Causa provavel: Tamanho insuficiente da fila.\n");
         }
@@ -526,6 +535,8 @@ Info radix_sort(int* v, int n)
         {
             while(!q_isempty(vetor_de_filas[j]))
             {
+                // swaps conta atribuições também, além de só swaps
+                rdx.swaps++;
                 v[index] = q_rm(vetor_de_filas[j]);
                 index++;
             }
@@ -756,10 +767,10 @@ void mostrar_info(int* v, int n, int id_sort)
             break;
 
         default:
-            fprintf(stderr, "ID nao definido para sort.\n");
+            fprintf(stderr, "ID não definido para sort.\n");
     }
 
-    printf("Comparacoes: %u\nSwaps: %u\nTempo decorrido: %.3lf %s.\n",
+    printf("Comparacoes: %u\nMovimentacoes: %u\nTempo decorrido: %.3lf %s.\n",
         sort_info.comparisons, sort_info.swaps, (sort_info.execution_time < 0.1 ?
         sort_info.execution_time * 1000 :
         sort_info.execution_time), (sort_info.execution_time < 0.1 ? "milisegundos" : "segundos"));
@@ -964,7 +975,7 @@ int main()
     * 8 = merge
     * 9 = contagem menores
     */
-    relatorio(9);
+    relatorio(2);
     //testar_sort(9);
 
     return 0;
