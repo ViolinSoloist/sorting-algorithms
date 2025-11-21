@@ -8,6 +8,6 @@ fila.o: fila.c queue.h
 	gcc fila.c -o -Wall
 
 clean:
-	rm *.o main
+	rm main
 
 .PHONY: run clean
