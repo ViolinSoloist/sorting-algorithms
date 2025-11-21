@@ -989,12 +989,14 @@ int main()
             relatorio(escolha);
             //testar_sort(escolha);
             break;
+        } else if (escolha == -1) {
+            break;
         } else
             fprintf(stderr, "Fornecer entrada válida.\n");
-
     }
 
     printf("\nSaindo...\n");
 
     return 0;
+
 }
