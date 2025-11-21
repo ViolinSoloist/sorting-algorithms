@@ -963,7 +963,7 @@ void testar_sort(int id_sort)
 int main()
 {
     srand(time(NULL)); // iniciando o gerador de numeros aleatorios
-    int escolha;
+
     /**
     * 1 = bubble sort
     * 2 = heap sort
@@ -975,14 +975,8 @@ int main()
     * 8 = merge
     * 9 = contagem menores
     */
-   do{
-    printf("\nEscolha o metodo de ordenacao para testar(-1 para sair): ");
-    scanf("%d", &escolha);
-    if(escolha != -1){
-        relatorio(escolha);
-    }
-   }while(escolha != -1);
-   printf("\nSaindo..");
+    relatorio(9);
+    
     //testar_sort(9);
 
     return 0;
