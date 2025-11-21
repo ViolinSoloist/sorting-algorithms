@@ -963,7 +963,7 @@ void testar_sort(int id_sort)
 int main()
 {
     srand(time(NULL)); // iniciando o gerador de numeros aleatorios
-
+    int escolha;
     /**
     * 1 = bubble sort
     * 2 = heap sort
@@ -975,9 +975,26 @@ int main()
     * 8 = merge
     * 9 = contagem menores
     */
-    relatorio(9);
-    
-    //testar_sort(9);
+    while (true)
+    {
+        printf("\n* 1 = Bubblesort\n* 2 = Heapsort\n* 3 = Quicksort\n* 4 = Insertionsort\n");
+        printf("* 5 = Selectionsort\n* 6 = Shellsort\n* 7 = Radixsort\n* 8 = Mergesort\n* 9 = Contagem dos Menores\n");
+            
+        printf("\nEscolha o metodo de ordenacao para testar(-1 para sair): ");
+        scanf("%d", &escolha);
+        
+        // não colocamos condição pra caso a entrada fornecida seja string,
+        // por favor não fornecer string como entrada 🙏
+        if(escolha >= 1 && escolha <= 9) {
+            relatorio(escolha);
+            //testar_sort(escolha);
+            break;
+        } else
+            fprintf(stderr, "Fornecer entrada válida.\n");
+
+    }
+
+    printf("\nSaindo...\n");
 
     return 0;
 }
