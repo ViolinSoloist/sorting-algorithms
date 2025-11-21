@@ -10,7 +10,7 @@
 
 #define QNTD_TESTES 4
 
-#define ui unsigned int
+#define ll long long
 
 /**
  * @attention em todos os sorts, criar e cuidar de contadores de:
@@ -222,16 +222,16 @@ int maior_valor(int* v, int n)
 
 typedef struct info_ {
     int* sorted_array;
-    ui comparisons;
-    ui swaps;
+    ll comparisons;
+    ll swaps;
     double execution_time;
 }Info;
 
 
 Info bubble_sort(int* v, int n)
 {
-    ui comparisons = 0;
-    ui swaps = 0;
+    ll comparisons = 0;
+    ll swaps = 0;
     clock_t inicio = clock(); //inicio da marcação de tempo
 
 
@@ -256,7 +256,7 @@ Info bubble_sort(int* v, int n)
 }
 
 
-void quick_sort2(int* v, int inf, int sup, ui* comparisons, ui* swaps){  //quick sort dps da primeira chamada
+void quick_sort2(int* v, int inf, int sup, ll* comparisons, ll* swaps){  //quick sort dps da primeira chamada
     /* adicionei os parâmetros comparisons e swaps apra contar nas chamadas recursivas, e sóo ponteiros pra mudar o valor da chamada inicial*/
     int indiceMediana = medianadeTres(v, inf, sup);
     int pivo = v[indiceMediana];
@@ -298,8 +298,8 @@ void quick_sort2(int* v, int inf, int sup, ui* comparisons, ui* swaps){  //quick
 */
 
 Info quick_sort(int* v, int sup){
-    ui comparisons = 0;
-    ui swaps = 0;
+    ll comparisons = 0;
+    ll swaps = 0;
     clock_t inicio = clock(); //inicio da marcação de tempo
 
     int indiceMediana = medianadeTres(v,0, sup);
@@ -408,8 +408,8 @@ Info heap_sort(int* v, int n)
 }
 
 Info insertion_sort(int *v, int n){
-    ui comparisons = 0;
-    ui swaps = 0;
+    ll comparisons = 0;
+    ll swaps = 0;
     clock_t inicio = clock(); //inicio da marcação de tempo
 
     int i, j, elem;
@@ -435,8 +435,8 @@ Info insertion_sort(int *v, int n){
 }
 
 Info selection_sort(int *v, int n){
-    ui comparisons = 0;
-    ui swaps = 0;
+    ll comparisons = 0;
+    ll swaps = 0;
     clock_t inicio = clock(); //inicio da marcacaoo de tempo
 
     int i, j, min;
@@ -461,8 +461,8 @@ Info selection_sort(int *v, int n){
 }
 
 Info shell_sort(int *v, int n){
-    ui comparisons = 0;
-    ui swaps = 0;
+    ll comparisons = 0;
+    ll swaps = 0;
     clock_t inicio = clock(); //inicio da marcação de tempo
 
     // --- GERAR OS INCREMENTOS (Sequência de Knuth) COM BASE EM N ---
@@ -554,7 +554,7 @@ Info radix_sort(int* v, int n)
     return rdx;
 }
 
-void merge_mesclar(int *v, int min, int meio, int max, ui*comparisons, ui*swaps){
+void merge_mesclar(int *v, int min, int meio, int max, ll*comparisons, ll*swaps){
     int i, j, k; //auxiliares
     int n1 = meio - min + 1; //primeiro vetor
     int n2 = max - meio; //segundo vetor
@@ -599,7 +599,7 @@ void merge_mesclar(int *v, int min, int meio, int max, ui*comparisons, ui*swaps)
     }
 }
 
-void merge_dividir(int *v, int min, int max, ui*comparisons, ui*swaps){
+void merge_dividir(int *v, int min, int max, ll*comparisons, ll*swaps){
 
     if(min < max){
         int meio = min + ((max-min)/2);
@@ -612,8 +612,8 @@ void merge_dividir(int *v, int min, int max, ui*comparisons, ui*swaps){
 }
 
 Info merge_sort(int *v, int n){
-    ui comparisons = 0;
-    ui swaps = 0;
+    ll comparisons = 0;
+    ll swaps = 0;
     clock_t inicio = clock();
 
     merge_dividir(v, 0, n-1, &comparisons, &swaps);
@@ -770,7 +770,7 @@ void mostrar_info(int* v, int n, int id_sort)
             fprintf(stderr, "ID não definido para sort.\n");
     }
 
-    printf("Comparacoes: %u\nMovimentacoes: %u\nTempo decorrido: %.3lf %s.\n",
+    printf("Comparacoes: %lld\nMovimentacoes: %lld\nTempo decorrido: %.3lf %s.\n",
         sort_info.comparisons, sort_info.swaps, (sort_info.execution_time < 0.1 ?
         sort_info.execution_time * 1000 :
         sort_info.execution_time), (sort_info.execution_time < 0.1 ? "milisegundos" : "segundos"));
@@ -837,10 +837,10 @@ void relatorio(int id_sort) /** @param recebe id de qual sort vai ser analisado*
         int tam_v_atual = tamanhos_de_teste[i];
         // cinco chamadas por tamanho de vetor aleatorio
 
-        if (tam_v_atual == 100000) {
-            printf("ATENCAO: para cada sort aleatorio desse tamanho, demora um pouco mais de 20 seg.\n");
-            printf("Vai demorar um pouco menos de 2 min para mostrar todos os 5 vetores ordenados.\n\n");
-        }
+        // if (tam_v_atual == 100000) {
+        //     printf("ATENCAO: para cada sort aleatorio desse tamanho, demora um pouco mais de 20 seg.\n");
+        //     printf("Vai demorar um pouco menos de 2 min para mostrar todos os 5 vetores ordenados.\n\n");
+        // }
 
         // condição temporária (pra poder testar n = 100000 com outros modos, mas não com esse se não vai demorar muito)
         // if (tam_v_atual != 100000)
@@ -963,7 +963,7 @@ void testar_sort(int id_sort)
 int main()
 {
     srand(time(NULL)); // iniciando o gerador de numeros aleatorios
-    int escolha;
+
     /**
     * 1 = bubble sort
     * 2 = heap sort
@@ -975,14 +975,8 @@ int main()
     * 8 = merge
     * 9 = contagem menores
     */
-    do{
-        printf("\nDigite o id do metodo: ");
-        scanf("%d", &escolha);
-        if(escolha != -1)
-           { relatorio(escolha);}
-    }while(escolha != -1);
+    relatorio(9);
     //testar_sort(9);
-    printf("\nSaindo...");
 
     return 0;
 }
