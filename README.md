@@ -20,9 +20,8 @@ Compilar e executar manualmente:
 gcc main.c fila.c -o main -Wall
 ./main
 
-INSTRUÇÕES PARA USO DO PROGRAMA (Necessário editar parte main() do código para testar diferentes sorts):
-* ir para função main() (linha 963)
-* editar a chamada da função relatório()
-* inserir número que corresponde ao método de ordenação que deseja verificar
-* isso gerara um "mini relatório" no terminal exibindo as informações de cada sort
-* (é possível verificar todas as informações na tabelinha de dados)
+INSTRUÇÕES PARA USO DO PROGRAMA:
+Ao executar o programa, uma interface no terminal aparecerá, identificando cada tipo de sort com um número especfíco
+basta escolher o número para executar a função de relatório() com o algoritmo desejado, criando uma espécie de
+"mini relatório" mostrando informações como tempo decorrido, comparações e movimentações para vetores aleatórios,
+ordenados e inversamente ordenados.
