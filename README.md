@@ -1,2 +1,2 @@
 # sorting-algorithms
-Análise, implementação e comparação dos diversos métodos de ordenação.
+Análise, implementação e comparação de diversos métodos de ordenação.
