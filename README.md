@@ -1,6 +1,9 @@
 # sorting-algorithms
 Análise, implementação e comparação de diversos métodos de ordenação.
 
+Danilo Salmen Stocco - 16861501
+Erik Min Soo Chung - 15450334
+
 LINK PARA RELATÓRIO:
 https://docs.google.com/document/d/1t7LfjXGAWvf93IhjtAK_N6gjeYtYipndhzALaI0oEyc/edit?usp=sharing
 
